@@ -34,26 +34,19 @@ var app = {
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
-		
-		// Some log	
-		alert("onDeviceReady");	
-		
-		// nfc Listener
-		nfc.addMimeTypeListener(
-			"my/mimeType",
-			function() {
-				console.log( "Listening for NDEF mime tags with type app/bt." );
-				alert("addMimeTypeListener");
+		nfc.showSettings(
+			function ()
+			{
+				alert('nfc.showSettings.success');
+				console.log("nfc.showSettings.success");
 			},
 			
-			function() {
-				console.log("Success.");
-			},
-			
-			function() {
-				console.log("Fail.");
+			function ()
+			{
+				alert('nfc.showSettings.failure');
+				console.log("nfc.showSettings.failure");
 			}
-		);
+		);		
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {

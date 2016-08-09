@@ -38,24 +38,101 @@
     -->
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
 
-    <link rel="stylesheet" type="text/css" href="css/index.css" />
-    <title>Hello World</title>
+    <!-- Bootstrap core CSS -->
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="dist/css/navbar-fixed-top.css" rel="stylesheet">
+    <link href="dist/css/navbar-static-top.css" rel="stylesheet">
+    <link href="css/index.css" rel="stylesheet" type="text/css"/>
+
+    <script>
+        function cerrarAmbulancia()
+        {
+            console.log("index.html -> isONnfc(function)");
+            nfc.showSettings(
+                function ()
+                {
+                    console.log("index.nfc.showSettings.success");
+                    location.href = "pages/cerrar.html"; 
+                },
+            
+                function ()
+                {
+                    alert('No se puede mostrar la configuración NFC');
+                    console.log("index.nfc.showSettings.failure");
+                }
+            );                  
+        }
+    </script>
+    
+    <title>TraSANO</title>
 </head>
 
 <body>
-    <div class="app">
-        <h1>PhoneGap</h1>
-        <div id="deviceready" class="blink">
-            <p class="event listening">Connecting to Device</p>
-            <p class="event received">Device is Ready</p>
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="container">
+            <a class="navbar-brand pull-right" href="#">
+                    <span class="glyphicon glyphicon-menu-hamburger"></span> 
+            </a>          
+        </div>
+    </nav>
+    <!-- /fixed navbar -->  
+    
+    <!-- Container -->
+    <div class="container">
+        <div class="page-header">
+            <h1>Servicio</h1>
+        </div>
+      
+        <div class="jumbotron">
+            <h2>Transporte Sanitario No Urgente</h2>            
+            <p>         
+                <button type="button" class="btn btn-lg btn-success" data-toggle="modal" data-target="#nfcALERT">Solicitar ambulancia</button>
+                <!-- <a class="btn btn-lg btn-default" href="javascript:isNFC();" role="button">Aceptar</a> -->
+            </p>
+        </div> 
+        
+        <p>
+            <button type="button" class="btn btn-warning btn-lg">Reclamar ambulancia</button>
+        </p>
+        <p>
+            <button type="button" class="btn btn-danger btn-lg">Cancelar ambulancia</button>
+        </p>
+            
+    </div> 
+    <!-- /container -->
+    
+    <!-- Modal -->
+    <div class="modal fade" id="nfcALERT" tabindex="-1" role="dialog" aria-labelledby="nfcALERTLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>Compruebe que la conexión NFC está activada</h4>
+                </div>
+                <div class="modal-body">                    
+                    <p>Ajustes -> Más... -> NFC</p>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-lg btn-primary" href="javascript:cerrarAmbulancia();" role="button">Aceptar</a>
+                </div>
+            </div>
         </div>
     </div>
+    <!-- /modal -->
+
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
-	<script type="text/javascript" charset="utf-8" src="assets/js/phonegap-nfc.js"></script>
     <script type="text/javascript">
         app.initialize();
     </script>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="dist/js/bootstrap.min.js"></script>
+    <!-- ================================================== -->
 </body>
 
 </html>
