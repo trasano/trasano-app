@@ -47,9 +47,9 @@
     <link href="css/index.css" rel="stylesheet" type="text/css"/>
 
     <script>
-        function cerrarAmbulancia()
+        function activateNFC()
         {
-            console.log("index.html -> isONnfc(function)");
+            console.log("index.activateNFC()");
             nfc.showSettings(
                 function ()
                 {
@@ -63,6 +63,35 @@
                     console.log("index.nfc.showSettings.failure");
                 }
             );                  
+        }
+
+        function closeAmbulance()
+        {
+            console.log("index.closeAmbulance()");
+            nfc.enabled(
+                function ()
+                {
+                    console.log("index.nfc.enabled.success");
+                    location.href = "pages/cerrar.html"; 
+                },
+            
+                function (errorCode)
+                {
+                    console.log("index.nfc.enabled.failure");
+                    var err = errorCode;
+    
+                    /*switch (err) {
+                        case NO_NFC:
+                            messg = "Dispositivo no compatible con NFC";
+                            break; 
+                        case NFC_DISABLED:
+                            messg = "Conexion NFC desactivada";
+                            break;  
+                    }                     
+                    alert(messg);*/
+                    alert("La conexión NFC está desactivada " + errorCode);
+                }
+            );                 
         }
     </script>
     
@@ -89,8 +118,7 @@
         <div class="jumbotron">
             <h2>Transporte Sanitario No Urgente</h2>            
             <p>         
-                <button type="button" class="btn btn-lg btn-success" data-toggle="modal" data-target="#nfcALERT">Solicitar ambulancia</button>
-                <!-- <a class="btn btn-lg btn-default" href="javascript:isNFC();" role="button">Aceptar</a> -->
+                <button type="button" class="btn btn-lg btn-success" data-toggle="modal" data-target="#nfcALERT">Solicitar ambulancia</button>                
             </p>
         </div> 
         
@@ -109,13 +137,13 @@
         <div class="modal-dialog modal-sm" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4>Compruebe que la conexión NFC está activada</h4>
+                    <h4>Solicitar Ambulancia</h4>
                 </div>
                 <div class="modal-body">                    
-                    <p>Ajustes -> Más... -> NFC</p>
+                    <a class="btn btn-lg btn-primary" href="javascript:activateNFC();" role="button">Activar NFC</a>
                 </div>
-                <div class="modal-footer">
-                    <a class="btn btn-lg btn-primary" href="javascript:cerrarAmbulancia();" role="button">Aceptar</a>
+                <div class="modal-footer">                    
+                    <a class="btn btn-lg btn-success" href="javascript:closeAmbulance();" role="button">Solicitar ambulancia</a>
                 </div>
             </div>
         </div>
