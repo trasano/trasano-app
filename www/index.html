@@ -49,11 +49,11 @@
     <script>
         function activateNFC()
         {
-            console.log("index.activateNFC()");
+            console.log("index.activateNFC()");            
             nfc.showSettings(
                 function ()
                 {
-                    console.log("index.nfc.showSettings.success");                     
+                    console.log("index.nfc.showSettings.success");                    
                 },
             
                 function ()
@@ -87,8 +87,8 @@
                             break; 
                         case "NFC_DISABLED":
                             console.log("index.nfc.closeAmbulance.NFC_DISABLED");
-                            activateNFC();
-                            closeAmbulance();                            
+                            alert("AVISO: Para solicitar una ambulancia la conexión NFC debe estar ACTIVADA");
+                            activateNFC();                            
                             break;  
                     }                    
                 }
