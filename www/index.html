@@ -88,7 +88,7 @@
                         case "NFC_DISABLED":
                             console.log("index.nfc.closeAmbulance.NFC_DISABLED");
                             activateNFC();
-                            location.href = "pages/cerrar.html";                            
+                            closeAmbulance();                            
                             break;  
                     }                    
                 }
@@ -141,10 +141,12 @@
                     <h4>Solicitar Ambulancia</h4>
                 </div>
                 <div class="modal-body">                    
-                    <a class="btn btn-lg btn-primary" href="javascript:activateNFC();" role="button">Activar NFC</a>
+                    <!-- <a class="btn btn-lg btn-primary" href="javascript:activateNFC();" role="button">Activar NFC</a> -->
+                    <p>¿Desea solicitar una ambulancia?</p>
                 </div>
                 <div class="modal-footer">                    
-                    <a class="btn btn-lg btn-success" href="javascript:closeAmbulance();" role="button">Solicitar ambulancia</a>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                    <a class="btn btn btn-success" href="javascript:closeAmbulance();" role="button">SI</a>
                 </div>
             </div>
         </div>
