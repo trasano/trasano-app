@@ -53,13 +53,12 @@
             nfc.showSettings(
                 function ()
                 {
-                    console.log("index.nfc.showSettings.success");
-                    location.href = "pages/cerrar.html"; 
+                    console.log("index.nfc.showSettings.success");                     
                 },
             
                 function ()
                 {
-                    alert('No se puede mostrar la configuración NFC');
+                    alert('ERROR: No se puede mostrar la configuración NFC');
                     console.log("index.nfc.showSettings.failure");
                 }
             );                  
@@ -80,16 +79,18 @@
                     console.log("index.nfc.enabled.failure");
                     var err = errorCode;
     
-                    /*switch (err) {
-                        case NO_NFC:
-                            messg = "Dispositivo no compatible con NFC";
+                    switch (err) {
+                        case "NO_NFC":
+                            console.log("index.nfc.closeAmbulance.NO_NFC");
+                            alert("ERROR: Dispositivo no compatible con NFC");
+                            location.href = "pages/error.html"; 
                             break; 
-                        case NFC_DISABLED:
-                            messg = "Conexion NFC desactivada";
+                        case "NFC_DISABLED":
+                            console.log("index.nfc.closeAmbulance.NFC_DISABLED");
+                            activateNFC();
+                            location.href = "pages/cerrar.html";                            
                             break;  
-                    }                     
-                    alert(messg);*/
-                    alert("La conexión NFC está desactivada " + errorCode);
+                    }                    
                 }
             );                 
         }
