@@ -46,6 +46,9 @@
     <link href="dist/css/navbar-static-top.css" rel="stylesheet">
     <link href="css/index.css" rel="stylesheet" type="text/css"/>
 
+    <!-- JQuery-mobile -->
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+
     <script>
         function activateNFC()
         {
@@ -58,7 +61,7 @@
             
                 function ()
                 {
-                    alert('ERROR: No se puede mostrar la configuración NFC');
+                    alert('No se puede mostrar la configuración NFC');
                     console.log("index.nfc.showSettings.failure");
                 }
             );                  
@@ -71,7 +74,7 @@
                 function ()
                 {
                     console.log("index.nfc.enabled.success");
-                    location.href = "pages/cerrar.html"; 
+                    location.href = "pages/close.html"; 
                 },
             
                 function (errorCode)
@@ -82,18 +85,39 @@
                     switch (err) {
                         case "NO_NFC":
                             console.log("index.nfc.closeAmbulance.NO_NFC");
-                            alert("ERROR: Dispositivo no compatible con NFC");
+                            alert("Dispositivo no compatible con NFC");
                             location.href = "pages/error.html"; 
                             break; 
                         case "NFC_DISABLED":
                             console.log("index.nfc.closeAmbulance.NFC_DISABLED");
-                            alert("AVISO: Para solicitar una ambulancia la conexión NFC debe estar ACTIVADA");
+                            alert("Para solicitar una ambulancia la conexión NFC debe estar ACTIVADA");
                             activateNFC();                            
-                            break;  
+                            break;
+                        default:
+                            console.log("index.nfc.closeAmbulance.DEFAULT");
                     }                    
                 }
             );                 
         }
+
+        function claimAmbulance()
+        {
+            console.log("index.claimAmbulance()");
+            alert("Se va a proceder a reclamar una ambulancia");            
+        }
+
+        function cancelAmbulance()
+        {
+            console.log("index.cancelAmbulance()");
+            alert("Se va a proceder a cancelar una ambulancia");
+        }
+
+        $(document).ready(function() {            
+            // Check if user is registrated
+            if (localStorage.getItem("dni") === null || localStorage.getItem("dni") === "") {                
+                window.location = "pages/registeredUser.html";
+            } 
+        });
     </script>
     
     <title>TraSANO</title>
@@ -103,8 +127,8 @@
     <!-- Fixed navbar -->
     <nav class="navbar navbar-default navbar-static-top" role="navigation">
         <div class="container">
-            <a class="navbar-brand pull-right" href="#">
-                    <span class="glyphicon glyphicon-menu-hamburger"></span> 
+            <a class="navbar-brand pull-right" href="pages/user.html">
+                    <span class="glyphicon glyphicon-user"></span> 
             </a>          
         </div>
     </nav>
@@ -124,10 +148,10 @@
         </div> 
         
         <p>
-            <button type="button" class="btn btn-warning btn-lg">Reclamar ambulancia</button>
+            <button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#claimALERT">Reclamar ambulancia</button>
         </p>
         <p>
-            <button type="button" class="btn btn-danger btn-lg">Cancelar ambulancia</button>
+            <button type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#cancelALERT">Cancelar ambulancia</button>
         </p>
             
     </div> 
@@ -147,6 +171,46 @@
                 <div class="modal-footer">                    
                     <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
                     <a class="btn btn btn-success" href="javascript:closeAmbulance();" role="button">SI</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /modal -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="claimALERT" tabindex="-1" role="dialog" aria-labelledby="claimALERTLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>Solicitar Ambulancia</h4>
+                </div>
+                <div class="modal-body">                    
+                    <!-- <a class="btn btn-lg btn-primary" href="javascript:activateNFC();" role="button">Activar NFC</a> -->
+                    <p>¿Desea cancelar la ambulancia?</p>
+                </div>
+                <div class="modal-footer">                    
+                    <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                    <a class="btn btn btn-warning" href="javascript:claimAmbulance();" role="button">SI</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /modal -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="cancelALERT" tabindex="-1" role="dialog" aria-labelledby="cancelALERTLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>Cancelar Ambulancia</h4>
+                </div>
+                <div class="modal-body">                    
+                    <!-- <a class="btn btn-lg btn-primary" href="javascript:activateNFC();" role="button">Activar NFC</a> -->
+                    <p>¿Desea cancelar una ambulancia?</p>
+                </div>
+                <div class="modal-footer">                    
+                    <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                    <a class="btn btn btn-primary" href="javascript:cancelAmbulance();" role="button">SI</a>
                 </div>
             </div>
         </div>
