@@ -33,20 +33,7 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        app.receivedEvent('deviceready');
-		nfc.showSettings(
-			function ()
-			{
-				alert('nfc.showSettings.success');
-				console.log("nfc.showSettings.success");
-			},
-			
-			function ()
-			{
-				alert('nfc.showSettings.failure');
-				console.log("nfc.showSettings.failure");
-			}
-		);		
+        app.receivedEvent('deviceready');              
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
