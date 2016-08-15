@@ -69,21 +69,17 @@
 
         function onNdef (nfcEvent) {
         
+            alert("pages.close.onNdef = " + JSON.stringify(nfcEvent.tag));
             console.log("pages.close.onNdef = " + JSON.stringify(nfcEvent.tag));  
             var tag = nfcEvent.tag;                    
             navigator.notification.vibrate(100);        
         };
 
-        $(document).ready(function() {            
-            // Check if user is registrated
-            if (localStorage.getItem("dni") === null || localStorage.getItem("dni") === "") {                
-                window.location = "pages/registeredUser.html";
-            }
-            else
-            {
-                $("#dniJumbotron").append("<h1>dni: "+ localStorage.getItem("dni") + "</h1>");
-
-                //Check if NFC is activated
+        function readNFCTag() {
+            // Waiting to phoneGAP ready 
+            document.addEventListener("deviceready", onDeviceReady(), false);
+            
+            function onDeviceReady() {
                 nfc.enabled(
                     // SUCCESS
                     function ()
@@ -123,11 +119,27 @@
                                 console.log("pages.close.nfc.DEFAULT");
                         }                    
                     }
-                );
+                );                 
+            }            
+        };
 
-                    
-            } 
-        });
+        
+
+        $(document).ready(function() {            
+                // Check if user is registrated
+                if (localStorage.getItem("dni") === null || localStorage.getItem("dni") === "") {                
+                    window.location = "pages/registeredUser.html";
+                }
+                else
+                {
+                    $("#dniJumbotron").append("<h1>dni: "+ localStorage.getItem("dni") + "</h1>");
+
+                    //Check if NFC is activated and read NFC tag
+                    readNFCTag();                                           
+                } 
+            });
+
+        
     </script>
 
     <title>TraSANO</title>
@@ -167,9 +179,6 @@
 	
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="../js/index.js"></script>    
-    <script type="text/javascript">
-        app.initialize();
-    </script>
 </body>
 
 </html>
