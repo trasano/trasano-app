@@ -49,82 +49,30 @@
     <!-- JQuery-mobile -->
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 
-    <script>
-        function activateNFC()
-        {
-            console.log("index.activateNFC()");            
-            nfc.showSettings(
-                function ()
-                {
-                    console.log("index.nfc.showSettings.success");                    
-                },
-            
-                function ()
-                {
-                    alert('No se puede mostrar la configuración NFC');
-                    console.log("index.nfc.showSettings.failure");
-                }
-            );                  
-        }
+    <!-- Custom library -->
+    <script type="text/javascript" src="js/trasano.js"></script>
 
-        function closeAmbulance()
-        {
-            console.log("index.closeAmbulance()");
-            nfc.enabled(
-                function ()
-                {
-                    console.log("index.nfc.enabled.success");
-                    //location.href = "pages/close.html"; 
-                    location.href = "close.html"; 
-                },
-            
-                function (errorCode)
-                {
-                    console.log("index.nfc.enabled.failure");
-                    var err = errorCode;
+    <script>          
+        // Waiting to phoneGAP ready 
+        function onLoad() {
+            document.addEventListener("deviceready", onDeviceReady(), false);
+        };
     
-                    switch (err) {
-                        case "NO_NFC":
-                            console.log("index.nfc.closeAmbulance.NO_NFC");
-                            alert("Dispositivo no compatible con NFC");
-                            location.href = "pages/error.html"; 
-                            break; 
-                        case "NFC_DISABLED":
-                            console.log("index.nfc.closeAmbulance.NFC_DISABLED");
-                            alert("Para solicitar una ambulancia la conexión NFC debe estar ACTIVADA");
-                            activateNFC();                            
-                            break;
-                        default:
-                            console.log("index.nfc.closeAmbulance.DEFAULT");
-                    }                    
-                }
-            );                 
-        }
-
-        function claimAmbulance()
-        {
-            console.log("index.claimAmbulance()");
-            alert("Se va a proceder a reclamar una ambulancia");            
-        }
-
-        function cancelAmbulance()
-        {
-            console.log("index.cancelAmbulance()");
-            alert("Se va a proceder a cancelar una ambulancia");
-        }
-
-        $(document).ready(function() {            
-            // Check if user is registrated
-            if (localStorage.getItem("dni") === null || localStorage.getItem("dni") === "") {                
-                window.location = "pages/registeredUser.html";
-            } 
-        });
+        // Device APIs are available
+        function onDeviceReady() {
+            $(document).ready(function() {            
+                // Check if user is registrated
+                if (localStorage.getItem("dni") === null || localStorage.getItem("dni") === "") {                
+                    window.location = "pages/registeredUser.html";
+                } 
+            });
+        };
     </script>
     
     <title>TraSANO</title>
 </head>
 
-<body>
+<body onLoad="javascript:onLoad();">
     <!-- Fixed navbar -->
     <nav class="navbar navbar-default navbar-static-top" role="navigation">
         <div class="container">
@@ -219,6 +167,7 @@
     <!-- /modal -->
 
     <script type="text/javascript" src="cordova.js"></script>
+    
     <!--<script type="text/javascript" src="js/index.js"></script>
     <script type="text/javascript">
         app.initialize();
