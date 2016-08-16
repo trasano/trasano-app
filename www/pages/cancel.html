@@ -37,57 +37,46 @@
     * Create your own at http://cspisawesome.com
     -->
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
-	
-	<!-- Bootstrap core CSS -->
+    
+    <!-- Bootstrap core CSS -->
     <link href="../dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="../dist/css/navbar-static-top.css" rel="stylesheet">
-    <link href="../dist/css/navbar-static-fixed.css" rel="stylesheet">
-	
-    <script type="text/javascript" charset="utf-8" src="../lib/jquery.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="../lib/fastclick.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="../lib/appframework/appframework.ui.min.js"></script>  
+    <link href="../dist/css/navbar-static-top.css" rel="stylesheet">        
 
-    <link rel="stylesheet" type="text/css" href="../css/index.css" />
+    <!-- JQuery-mobile -->
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+
+    <!-- Custom library -->
+    <script type="text/javascript" src="../js/trasano.js"></script>	
+    
     <title>TraSANO</title>
 </head>
 
 <body>
-		<!-- Fixed navbar -->
-	<nav class="navbar navbar-default navbar-static-top" role="navigation">
-        <div class="container">
-			<!-- <div class="navbar-header">          
-				<a class="navbar-brand" href="#">traSANO</a>
-			</div> -->
-			<a class="navbar-brand pull-left" href="../index.html">
+	<!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="container">          
+            <a class="navbar-brand pull-left" href="../index.html">
                     <span class="glyphicon glyphicon-arrow-left"></span> 
             </a>
-            <a class="navbar-brand pull-right" href="#">
-                    <span class="glyphicon glyphicon-menu-hamburger"></span> 
+            <a class="navbar-brand pull-right" href="user.html">
+                    <span class="glyphicon glyphicon-user"></span> 
             </a>          
         </div>
-    </nav> 
+    </nav>
+    <!-- Fixed navbar -->
     
 
+    <!-- Container -->
     <div class="container">
-
-      <!-- Main component for a primary marketing message or call to action -->
-      <div class="jumbotron">
-        <h1>Cancelar ambulancia</h1>
-        <p>EN CONSTRUCCIÓN</p>                
-      </div> 
-
-	<!--	
-		<p>
-            <button type="button" class="btn btn-warning btn-lg">Reclamar ambulancia</button>
-        </p>
-		<p>
-            <button type="button" class="btn btn-danger btn-lg">Cancelar ambulancia</button>
-		</p>
-	-->
-		
-    </div> <!-- /container -->
+        <div class="page-header text-center">
+                <h1 >CANCELAR AMBULANCIA</h1>
+        </div>
+      
+        <div class="jumbotron" id="dniJumbotron">EN CONSTRUCCIÓN</div>                             
+    </div>
+    <!-- /container -->
 	
 	<!-- Bootstrap core JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
