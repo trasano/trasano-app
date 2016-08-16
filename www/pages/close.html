@@ -72,7 +72,7 @@
                     $("#dniJumbotron").append("<h1 class='text-center'>DNI: "+ localStorage.getItem("dni") + "</h1>");
 
                     //Check if NFC is activated and read NFC tag
-                    //readNFCTag();                                           
+                    readNFCTag();                                           
                 } 
             });
         };
@@ -103,8 +103,7 @@
       
         <div class="jumbotron" id="dniJumbotron"></div> 
 
-        <h4 class="text-center">Aproxime su dispositivo movil a la etiqueta</h4>
-        <a class="btn btn btn-primary" href="javascript:readNFCTag();" role="button">NFC</a>             		
+        <h4 class="text-center">Aproxime su dispositivo movil a la etiqueta</h4>                    		
     </div>
     <!-- /container -->
 
