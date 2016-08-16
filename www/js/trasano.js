@@ -114,7 +114,7 @@ function onNdef (nfcEvent) {
     navigator.notification.vibrate(100);        
 };
 
-function readNFCTag_old() {
+function readNFCTag() {
     nfc.enabled(
         // SUCCESS
         function ()
@@ -155,8 +155,4 @@ function readNFCTag_old() {
             }                    
         }
     );               
-};
-
-function readNFCTag() {   
-    navigator.notification.vibrate(100);        
 };
