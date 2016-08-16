@@ -59,47 +59,19 @@
     
         // Device APIs are available        
         function onDeviceReady() {          
-            //$(document).ready(function() {            
-            //    // Check if user is registrated
-            //   if (localStorage.getItem("dni") === null || localStorage.getItem("dni") === "") {                
-            //        window.location = "registeredUser.html";
-            //    }
-            //    else
-            //    {
-            //        $("#dniJumbotron").append("<h1 class='text-center'>DNI: "+ localStorage.getItem("dni") + "</h1>");
+            $(document).ready(function() {            
+                // Check if user is registrated
+               if (localStorage.getItem("dni") === null || localStorage.getItem("dni") === "") {                
+                    window.location = "registeredUser.html";
+                }
+                else
+                {
+                    $("#dniJumbotron").append("<h1 class='text-center'>DNI: "+ localStorage.getItem("dni") + "</h1>");
 
                     //Check if NFC is activated and read NFC tag
-            //        readNFCTag();                                           
-            //    } 
-            //});
-            nfc.enabled(
-                function ()
-                {
-                    console.log("trasano.closeAmbulance.nfc.enabled.success");
-                    location.href = "pages/close.html";                     
-                },
-            
-                function (errorCode)
-                {
-                    console.log("trasano.closeAmbulance.nfc.enabled.failure");
-                    var err = errorCode;
-
-                    switch (err) {
-                        case "NO_NFC":
-                            console.log("trasano.closeAmbulance.nfc.NO_NFC");
-                            alert("Dispositivo no compatible con NFC");
-                            location.href = "pages/error.html"; 
-                            break; 
-                        case "NFC_DISABLED":
-                            console.log("trasano.closeAmbulance.nfc.NFC_DISABLED");
-                            alert("Para solicitar una ambulancia la conexión NFC debe estar ACTIVADA");
-                            activateNFC();                            
-                            break;
-                        default:
-                            console.log("trasano.closeAmbulance.nfc.DEFAULT");
-                    }                    
-                }
-            ); 
+                    readNFCTag();                                           
+                } 
+            });
         };
     </script>
 
@@ -131,14 +103,14 @@
         <h4 class="text-center">Aproxime su dispositivo movil a la etiqueta</h4>              		
     </div>
     <!-- /container -->
-		
+    
+    <script type="text/javascript" src="../cordova.js"></script> 		
+
 	<!-- Bootstrap core JavaScript -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../assets/js/vendor/jquery.min.js"><\/script>')</script> -->
     <script src="../dist/js/bootstrap.min.js"></script>
-	<!-- ================================================== -->
-	
-    <script type="text/javascript" src="../cordova.js"></script>    
+	<!-- ================================================== -->       
 </body>
 
 </html>
