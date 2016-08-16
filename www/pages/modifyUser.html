@@ -50,25 +50,13 @@
     <!-- JQuery-mobile -->
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 
+    <!-- Custom library -->
+    <script type="text/javascript" src="../js/trasano.js"></script>
+
     <title>TraSANO</title>
 
-    <script>      
-        function saveDNI () 
-        { 
-            localStorage.setItem("dni", $("#dniNumber").val());
-            alert("Paciente registrado!"); 
-            window.location = "../index.html";                                 
-        }
-
-        function getDNILetter () 
-        { 
-            console.log("registeredUser.getDNILetter");
-            dniLetter ="TRWAGMYFPDXBNJZSQVHLCKET"; 
-            position = $("#dniNumber").val() % 23;                        
-            return dniLetter.substring(position,position+1);                        
-        }
-
-        $( document ).ready(function() {                        
+    <script>             
+        $(document).ready(function() {                        
             $("#dniNumber").val(localStorage.getItem("dni"));
         });
 
