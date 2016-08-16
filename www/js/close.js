@@ -8,21 +8,21 @@ function activateNFC()
     nfc.showSettings(
         function ()
         {
-            console.log("pages.close.nfc.showSettings.success");                    
+            console.log("close.nfc.showSettings.success");                    
         },
     
         function ()
         {
             alert('No se puede mostrar la configuración NFC');
-            console.log("pages.close.nfc.showSettings.failure");
+            console.log("close.nfc.showSettings.failure");
         }
     );                  
 }
 
 function onNdef (nfcEvent) {
 
-    alert("pages.close.onNdef = " + JSON.stringify(nfcEvent.tag));
-    console.log("pages.close.onNdef = " + JSON.stringify(nfcEvent.tag));  
+    alert("close.onNdef = " + JSON.stringify(nfcEvent.tag));
+    console.log("close.onNdef = " + JSON.stringify(nfcEvent.tag));  
     var tag = nfcEvent.tag;                    
     navigator.notification.vibrate(100);        
 };
@@ -36,7 +36,7 @@ function readNFCTag() {
             // SUCCESS
             function ()
             {
-                console.log("pages.close.nfc.enabled.success");
+                console.log("close.nfc.enabled.success");
                 nfc.addMimeTypeListener(
                     'text/plain',
                     onNdef(),
@@ -53,22 +53,22 @@ function readNFCTag() {
             // FAILURE
             function (errorCode)
             {
-                console.log("pages.close.nfc.enabled.failure");
+                console.log("close.nfc.enabled.failure");
                 var err = errorCode;
 
                 switch (err) {
                     case "NO_NFC":
-                        console.log("pages.close.nfc.NO_NFC");
+                        console.log("close.nfc.NO_NFC");
                         alert("Dispositivo no compatible con NFC");
                         location.href = "pages/error.html"; 
                         break; 
                     case "NFC_DISABLED":
-                        console.log("pages.close.nfc.NFC_DISABLED");
+                        console.log("close.nfc.NFC_DISABLED");
                         alert("Para solicitar una ambulancia la conexión NFC debe estar ACTIVADA");
                         activateNFC();                            
                         break;
                     default:
-                        console.log("pages.close.nfc.DEFAULT");
+                        console.log("close.nfc.DEFAULT");
                 }                    
             }
         );                 
