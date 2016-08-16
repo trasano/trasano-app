@@ -22,7 +22,7 @@
 <html lang="es">
 
 <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8"/>
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-tap-highlight" content="no" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
@@ -59,20 +59,48 @@
     
         // Device APIs are available        
         function onDeviceReady() {          
-            $(document).ready(function() {            
-                // Check if user is registrated
-                if (localStorage.getItem("dni") === null || localStorage.getItem("dni") === "") {                
-                    window.location = "registeredUser.html";
-                }
-                else
-                {
-                    $("#dniJumbotron").append("<h1 class='text-center'>DNI: "+ localStorage.getItem("dni") + "</h1>");
+            //$(document).ready(function() {            
+            //    // Check if user is registrated
+            //   if (localStorage.getItem("dni") === null || localStorage.getItem("dni") === "") {                
+            //        window.location = "registeredUser.html";
+            //    }
+            //    else
+            //    {
+            //        $("#dniJumbotron").append("<h1 class='text-center'>DNI: "+ localStorage.getItem("dni") + "</h1>");
 
                     //Check if NFC is activated and read NFC tag
-                    readNFCTag();                                           
-                } 
-            });
-        }
+            //        readNFCTag();                                           
+            //    } 
+            //});
+            nfc.enabled(
+                function ()
+                {
+                    console.log("trasano.closeAmbulance.nfc.enabled.success");
+                    location.href = "pages/close.html";                     
+                },
+            
+                function (errorCode)
+                {
+                    console.log("trasano.closeAmbulance.nfc.enabled.failure");
+                    var err = errorCode;
+
+                    switch (err) {
+                        case "NO_NFC":
+                            console.log("trasano.closeAmbulance.nfc.NO_NFC");
+                            alert("Dispositivo no compatible con NFC");
+                            location.href = "pages/error.html"; 
+                            break; 
+                        case "NFC_DISABLED":
+                            console.log("trasano.closeAmbulance.nfc.NFC_DISABLED");
+                            alert("Para solicitar una ambulancia la conexión NFC debe estar ACTIVADA");
+                            activateNFC();                            
+                            break;
+                        default:
+                            console.log("trasano.closeAmbulance.nfc.DEFAULT");
+                    }                    
+                }
+            ); 
+        };
     </script>
 
     <title>TraSANO</title>
