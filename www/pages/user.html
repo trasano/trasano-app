@@ -58,20 +58,6 @@
         $( document ).ready(function() {            
             $("#dniJumbotron").append("<h1>dni: "+ localStorage.getItem("dni") + "</h1>");
         });
-
-        // $("#deleteALERT").on("shown.bs.modal", function (event) {
-        //     alert("hello modal");             
-        //     $(this).find('.modal-body').val("<p>" + localStorage.getItem("dni") + "</p>");
-        //}); 
-
-        function deleteDNI(){
-            localStorage.removeItem("dni");
-            window.location = "registeredUser.html";               
-        }
-
-        function modifyDNI(){
-            window.location = "modifyUser.html";             
-        }
     </script>
 
 </head>
