@@ -1,20 +1,20 @@
 /*
 * author: @rvallinot 
- */
+*/
 
 function activateNFC()
 {
-    console.log("index.activateNFC()");            
+    console.log("page.close.activateNFC()");            
     nfc.showSettings(
         function ()
         {
-            console.log("index.nfc.showSettings.success");                    
+            console.log("pages.close.nfc.showSettings.success");                    
         },
     
         function ()
         {
             alert('No se puede mostrar la configuración NFC');
-            console.log("index.nfc.showSettings.failure");
+            console.log("pages.close.nfc.showSettings.failure");
         }
     );                  
 }
