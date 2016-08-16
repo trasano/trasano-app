@@ -157,19 +157,6 @@ function readNFCTag_old() {
     );               
 };
 
-function readNFCTag() {  
-    console.log("trasano.onDeviceReady.nfc.enabled.success");
-    nfc.addMimeTypeListener(
-        'text/plain',
-        onNdef(),
-        function() {
-            console.log("SUCCESS. Listening for NDEF mime tags with type text/plain.");
-            alert("SUCCESS reading NFC tag");
-        },
-        function() {
-            console.log("FAILURE. Listening for NDEF mime tags with type text/plain.");
-            alert("ERROR: Compruebe si la conexión NFC está activada");
-        }
-    ); 
-            
+function readNFCTag() {   
+    navigator.notification.vibrate(100);        
 };
