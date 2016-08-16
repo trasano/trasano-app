@@ -53,8 +53,11 @@
 
     <script>
         // Waiting to phoneGAP ready 
-        document.addEventListener("deviceready", onDeviceReady(), false);
+        function onLoad() {
+            document.addEventListener("deviceready", onDeviceReady(), false);
+        };
     
+        // Device APIs are available        
         function onDeviceReady() {          
             $(document).ready(function() {            
                 // Check if user is registrated
@@ -75,7 +78,7 @@
     <title>TraSANO</title>
 </head>
 
-<body>
+<body onLoad="javascript:onLoad();">
 	<!-- Fixed navbar -->
 	<nav class="navbar navbar-default navbar-static-top" role="navigation">
         <div class="container">			 
