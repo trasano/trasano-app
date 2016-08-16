@@ -74,8 +74,8 @@
 
       <!-- Main component for a primary marketing message or call to action -->
       <div class="jumbotron">
-        <h1>Solicitar ambulancia</h1>
-        <p>Aproxime su dispositivo movil a la etiqueta</p>                
+        <h1>Cancelar ambulancia</h1>
+        <p>EN CONSTRUCCIÓN</p>                
       </div> 
 
 	<!--	
@@ -89,65 +89,13 @@
 		
     </div> <!-- /container -->
 	
-	<script id="non-ndef-template" type="text/x-handlebars-template">
-		<p>Scanned a non-NDEF NFC tag</p>
-        <p>
-            Tag Id: <strong>{{ bytesToHexString id }}</strong>
-        </p>
-    </script>
-
-    <script id="tag-template" type="text/x-handlebars-template">
-        <p>Scanned an NDEF tag with {{ ndefMessage.length }} {{ pluralize ndefMessage.length 'record' 'records' }}</p>
-
-        {{!
-            BB10 and WP8 will not have any meta info
-            Android P2P will not have id, but will have type
-        }}
-        <dl>
-            {{#if id}}
-            <dt>Tag Id</dt>             <dd>{{ bytesToHexString id }}</dd>
-            {{/if}}
-            
-            {{#if type}}
-            <dt>Tag Type</dt>           <dd>{{ type }}</dd>
-            {{/if}}
-
-            {{#if maxSize }}
-            <dt>Max Size</dt>           <dd>{{ maxSize }} bytes</dd>
-            {{/if}}            
-
-            {{#if freeSpaceSize }}
-            <dt>Free Space</dt>         <dd>{{ freeSpaceSize }} bytes</dd>
-            {{/if}}
-
-            {{#if id}}
-            <dt>Is Writable</dt>        <dd>{{ toString isWritable }}</dd>
-            <dt>Can Make Read Only</dt> <dd>{{ toString canMakeReadOnly }}</dd>
-            {{/if}}            
-        </dl>
-
-        {{#each ndefMessage}}  {{! does not read well, iterating on records non messages}}
-        <div class='record'>
-            Record {{ @index }}:<br/>
-            TNF: <b>{{ tnfToString tnf }}</b><br/>        
-            {{#if tnf}}
-                Record Type: <b>{{ bytesToString type }}</b><br/>
-                Payload: <b>{{ decodePayload this }}</b><br/>
-                {{#if id}}
-                    Record Id: <b>{{ bytesToString id }}</b><br/>            
-                {{/if}}
-            {{/if}}
-        </div>
-        {{/each}}
-    </script>
-	
 	<!-- Bootstrap core JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
     <script src="../dist/js/bootstrap.min.js"></script>
 	<!-- ================================================== -->
 	
-    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="../cordova.js"></script>
     <script type="text/javascript" src="../js/index.js"></script>
     <!-- <script type="text/javascript">
         app.initialize();

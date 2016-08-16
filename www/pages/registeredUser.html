@@ -82,7 +82,7 @@
 
             if ($("#dniNumber").val().length == 8) {
                 if ($.isNumeric($("#dniNumber").val())) {                    
-                    $("#dniLetter").append("<p>"+ getDNILetter() + "</p>");
+                    $("#dniLetter").append(getDNILetter());
                     $("#saveDNIButton").removeAttr("disabled");
                 } else {
                     alert("Número de DNI incorrecto");                    
@@ -135,7 +135,7 @@
     <script src="../dist/js/bootstrap.min.js"></script> 
 	<!-- ================================================== -->
 	
-    <script type="text/javascript" src="cordova.js"></script>    
+    <script type="text/javascript" src="../cordova.js"></script>    
 </body>
 
 </html>
