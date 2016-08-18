@@ -92,12 +92,14 @@ function closeAmbulance()
 function claimAmbulance()
 {
     console.log("trasano.claimAmbulance()");
+    navigator.vibrate(200);
     alert("Se va a proceder a reclamar una ambulancia");            
 }
 
 function cancelAmbulance()
 {
     console.log("trasano.cancelAmbulance()");
+    navigator.vibrate(200);
     alert("Se va a proceder a cancelar una ambulancia");
 }
 
@@ -111,7 +113,7 @@ function onNdef (nfcEvent) {
     alert("trasano.onNdef = " + JSON.stringify(nfcEvent.tag));
     console.log("trasano.onNdef = " + JSON.stringify(nfcEvent.tag));  
     var tag = nfcEvent.tag;                    
-    navigator.notification.vibrate(100);        
+    navigator.vibrate(100);        
 };
 
 function readNFCTag() {
