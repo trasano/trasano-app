@@ -110,9 +110,10 @@ function cancelAmbulance()
 
 function onNdef (nfcEvent) {
 
-    alert("trasano.onNdef = " + JSON.stringify(nfcEvent.tag()));
-    console.log("trasano.onNdef = " + JSON.stringify(nfcEvent.tag()));  
-    var tag = nfcEvent.tag;                    
+    console.log("trasano.onNdef()");
+    var tag = nfcEvent.tag;
+    var tagId = nfc.bytesToHexString(tag.id);                    
+    alert(tagId);
     navigator.vibrate(500);        
 };
 
