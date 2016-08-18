@@ -63,7 +63,7 @@
         function onDeviceReady() {
             $(document).ready(function() {                              
                 // check if is NFC Device
-                if (isNFCDevice()) {
+                if (isNFCDevice() === "true") {
                     // Check if user is registrated
                     if (localStorage.getItem("dni") === null || localStorage.getItem("dni") === "") {                
 
@@ -73,7 +73,7 @@
                         $("#dniJumbotron").append("<p class='text-center'>Acerque su dispositivo móvil a la pegatina NFC</p>");
                         //$("#dniJumbotron").append("<button type='button' class='btn btn-success btn-lg' data-toggle='modal' data-target='#nfcALERT'>Solicitar</button>");
                         //Check if NFC is activated and read NFC tag
-                        if (isNFCEnabled()) {
+                        if (isNFCEnabled() === "true") {
                             readNFCTag();                                               
                         }                        
                     }
