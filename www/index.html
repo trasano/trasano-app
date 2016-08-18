@@ -62,27 +62,48 @@
         // Cordova API is available
         function onDeviceReady() {
             $(document).ready(function() {                              
-                // check if is NFC Device
-                if (isNFCDevice() === "true") {
-                    // Check if user is registrated
-                    if (localStorage.getItem("dni") === null || localStorage.getItem("dni") === "") {                
+                // check if is NFC Device                
+                nfc.enabled(
+                    function () {
+                        console.log("trasano.isNFCDevice.nfc.enabled.success");
+                        if (localStorage.getItem("dni") === null || localStorage.getItem("dni") === "") {                
 
-                        window.location = "pages/registeredUser.html";
-                    } else {
-                        $("#dniJumbotron").append("<h1 class='text-center'>DNI: "+ localStorage.getItem("dni") + "</h1>");
-                        $("#dniJumbotron").append("<p class='text-center'>Acerque su dispositivo móvil a la pegatina NFC</p>");
-                        //$("#dniJumbotron").append("<button type='button' class='btn btn-success btn-lg' data-toggle='modal' data-target='#nfcALERT'>Solicitar</button>");
-                        //Check if NFC is activated and read NFC tag
-                        if (isNFCEnabled() === "true") {
+                            window.location = "pages/registeredUser.html";
+                        } else {
+                            $("#dniJumbotron").append("<h1 class='text-center'>DNI: "+ localStorage.getItem("dni") + "</h1>");
+                            $("#dniJumbotron").append("<p class='text-center'>Acerque su dispositivo móvil a la pegatina NFC</p>");
+                            //$("#dniJumbotron").append("<button type='button' class='btn btn-success btn-lg' data-toggle='modal' data-target='#nfcALERT'>Solicitar</button>");
+                            // Read NFC tag                        
                             readNFCTag();                                               
-                        }                        
-                    }
-                } else {
-                    // NFC is not supported by the device
-                    window.location = "pages/error.html";
-                }                      
+                        }             
+                    },
+                    function (errorCode) {
+                        console.log("trasano.isNFCDevice.nfc.enabled.failure");
+                        var err = errorCode;
+
+                        switch (err) {
+                            case "NO_NFC":
+                                console.log("trasano.isNFCDevice.nfc.NO_NFC");                    
+                                location.href = "pages/error.html"; 
+                                break; 
+                            case "NFC_DISABLED":
+                                console.log("trasano.isNFCDevice.nfc.NFC_DISABLED");
+                                activateNFC();
+                                // Recargar la página
+                                window.location.reload()                                                                               ;
+                                break;
+                            default:
+                                console.log("trasano.isNFCDevice.nfc.DEFAULT");
+                        }                    
+                    }             
+                );            
             });
         };
+        /*
+        $(document).on(function() {  
+            alert("Documento cargado");
+        });
+        */
     </script>
     
     <title>TraSANO</title>
