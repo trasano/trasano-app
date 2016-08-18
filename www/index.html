@@ -61,8 +61,9 @@
     
         // Device APIs are available
         function onDeviceReady() {
-            $(document).ready(function() {            
+            $(document).ready(function() {                              
                 // Check if user is registrated
+                activateNFC();
                 if (localStorage.getItem("dni") === null || localStorage.getItem("dni") === "") {                
                     window.location = "pages/registeredUser.html";
                 } 
