@@ -83,6 +83,7 @@ function isNFCDevice()
             }                    
         }
     );
+    console.log("trasano.isNFCDevice.value." + nfcDevice);
     return nfcDevice;                 
 }
 
@@ -115,6 +116,7 @@ function isNFCEnabled()
             }                    
         }
     );
+    console.log("trasano.isNFCDevice.value." + nfcFlag);
     return nfcFlag;                 
 }
 
