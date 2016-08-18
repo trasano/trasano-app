@@ -65,7 +65,7 @@
                 // check if is NFC Device                
                 nfc.enabled(
                     function () {
-                        console.log("trasano.isNFCDevice.nfc.enabled.success");
+                        console.log("index.nfc.enabled.success");
                         if (localStorage.getItem("dni") === null || localStorage.getItem("dni") === "") {                
 
                             window.location = "pages/registeredUser.html";
@@ -78,22 +78,21 @@
                         }             
                     },
                     function (errorCode) {
-                        console.log("trasano.isNFCDevice.nfc.enabled.failure");
+                        console.log("index.nfc.enabled.failure");
                         var err = errorCode;
 
                         switch (err) {
                             case "NO_NFC":
-                                console.log("trasano.isNFCDevice.nfc.NO_NFC");                    
+                                console.log("index.nfc.NO_NFC");                    
                                 location.href = "pages/error.html"; 
                                 break; 
                             case "NFC_DISABLED":
-                                console.log("trasano.isNFCDevice.nfc.NFC_DISABLED");
+                                console.log("index.nfc.NFC_DISABLED");
                                 activateNFC();
-                                // Recargar la página
-                                window.location.reload()                                                                               ;
+                                //DEBUG: volver al principio                                                              
                                 break;
                             default:
-                                console.log("trasano.isNFCDevice.nfc.DEFAULT");
+                                console.log("index.nfc.DEFAULT");
                         }                    
                     }             
                 );            
