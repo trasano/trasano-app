@@ -72,7 +72,7 @@ function isNFCDevice()
             switch (err) {
                 case "NO_NFC":
                     console.log("trasano.isNFCDevice.nfc.NO_NFC");                    
-                    location.href = "pages/error.html"; 
+                    //location.href = "pages/error.html"; 
                     break; 
                 case "NFC_DISABLED":
                     console.log("trasano.isNFCDevice.nfc.NFC_DISABLED");                    
