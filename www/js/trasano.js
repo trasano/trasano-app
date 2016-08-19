@@ -174,3 +174,19 @@ function readNFCTag() {
         }
     );                  
 };
+
+function nfcListener(nfcEvent) {
+    navigator.notification.alert(nfc.bytesToHexString(nfcEvent.tag.id), function() {}, "NFC Tag ID");
+}
+
+function win() {
+    console.log("Added Tag Discovered Listener");
+}
+
+function fail(reason) {
+    navigator.notification.alert(reason, function() {}, "There was a problem");
+}
+
+function discoverTag () {
+     nfc.addTagDiscoveredListener(nfcListener, win, fail);    
+};

@@ -58,11 +58,11 @@
         function onLoad() {
             document.addEventListener("deviceready", onDeviceReady(), false);
         };
-
+        /*
         function initReadNFC() {
             readNFCTag();
         }
-    
+        */
         // Cordova API is available
         function onDeviceReady() {
             $(document).ready(function() {                              
@@ -78,7 +78,9 @@
                             $("#dniJumbotron").append("<p class='text-center'>Acerque su dispositivo móvil a la pegatina NFC</p>");
                             //$("#dniJumbotron").append("<button type='button' class='btn btn-success btn-lg' data-toggle='modal' data-target='#nfcALERT'>Solicitar</button>");
                             // Read NFC tag
-                            window.addEventListener("load", initReadNFC,false);                                                    
+                            //window.addEventListener("load", initReadNFC,false);
+                            //readNFCTag();                                                    
+                            discoverTag();
                         }             
                     },
                     function (errorCode) {
