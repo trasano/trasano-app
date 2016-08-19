@@ -65,15 +65,18 @@
                 if ($.isNumeric($("#dniNumber").val())) {     
                     // has-success               
                     $("#dniForm.form-group").removeClass("has-success").removeClass("has-error").addClass("has-success");                
+                    $("#dniLetter").empty();
                 } else {
                     // has-error
                     $("#dniForm.form-group").removeClass("has-success").removeClass("has-error").addClass("has-error");
+                    $("#dniLetter").empty();
                 }
             }
 
             if ($("#dniNumber").val().length == 8) {
-                if ($.isNumeric($("#dniNumber").val())) {                    
-                    $("#dniLetter").append("<p>"+ getDNILetter() + "</p>");
+                if ($.isNumeric($("#dniNumber").val())) {
+                    $("#dniLetter").empty();                    
+                    $("#dniLetter").append(getDNILetter());
                     $("#saveDNIButton").removeAttr("disabled");
                 } else {
                     alert("Número de DNI incorrecto");                    

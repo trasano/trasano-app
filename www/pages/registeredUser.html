@@ -46,8 +46,8 @@
     <!-- Custom styles for this template -->
     <link href="../dist/css/navbar-static-top.css" rel="stylesheet">   
 
-    <!-- JApache Cordova Library -->
-    <script type="text/javascript" src="../cordova.js"></script>  
+    <!-- Apache Cordova Library -->
+    <script type="text/javascript" src="../cordova.js"></script>
 
     <!-- JQuery-mobile -->
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
@@ -57,28 +57,32 @@
 
     <title>TraSANO</title>
 
-    <script>   
+    <script>
+        // Cordova API is available        
         $(document).on('keyup','#dniNumber', function() {
-            // check if is number
-            if ($("#dniNumber").val().length <= 8) {
+            // check if is number            
+            if ($("#dniNumber").val().length < 8) {
                 if ($.isNumeric($("#dniNumber").val())) {     
                     // has-success               
-                    $("#dniForm.form-group").removeClass("has-success").removeClass("has-error").addClass("has-success");                
+                    $("#dniForm.form-group").removeClass("has-success").removeClass("has-error").addClass("has-success");
+                    $("#dniLetter").empty();                
                 } else {
                     // has-error
                     $("#dniForm.form-group").removeClass("has-success").removeClass("has-error").addClass("has-error");
+                    $("#dniLetter").empty();
                 }
-            }
-
-            if ($("#dniNumber").val().length == 8) {
-                if ($.isNumeric($("#dniNumber").val())) {                    
-                    $("#dniLetter").append(getDNILetter());
-                    $("#saveDNIButton").removeAttr("disabled");
-                } else {
-                    alert("Número de DNI incorrecto");                    
-                }
-            }                      
-        });
+            } else {
+                if ($("#dniNumber").val().length == 8) {
+                    if ($.isNumeric($("#dniNumber").val())) {                        
+                        $("#dniLetter").empty();
+                        $("#dniLetter").append(getDNILetter());
+                        $("#saveDNIButton").removeAttr("disabled");                        
+                    } else {
+                        alert("Número de DNI incorrecto");                    
+                    }
+                }    
+            }                                  
+        });        
     </script>
 
 </head>
@@ -113,9 +117,7 @@
             </div>            
             <a class="btn btn-primary" href="javascript:saveDNI();" role="button" disabled="disabled" id="saveDNIButton">Aceptar</a>
         </form>
-        </div>
-
-         	
+        </div>         	
     </div> <!-- /container -->
 
 	

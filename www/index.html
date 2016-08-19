@@ -57,59 +57,85 @@
         // Waiting to phoneGAP ready 
         function onLoad() {
             document.addEventListener("deviceready", onDeviceReady(), false);
-        };
-        /*
-        function initReadNFC() {
-            readNFCTag();
         }
-        */
+    
         // Cordova API is available
         function onDeviceReady() {
-            $(document).ready(function() {                              
-                // check if is NFC Device                
-                nfc.enabled(
-                    function () {
-                        console.log("index.nfc.enabled.success");
-                        if (localStorage.getItem("dni") === null || localStorage.getItem("dni") === "") {                
+            $(document).ready(function() { 
+                console.log("index.onDeviceReady");  
+                $(window).load(function() {
+                    console.log("index.window.load");
+                    if (localStorage.getItem("dni") === null || localStorage.getItem("dni") === "") {               
+                        window.location = "pages/registeredUser.html";
+                    } else {
+                        $("#dniJumbotron").append("<h1 class='text-center'>DNI: "+ localStorage.getItem("dni") + "</h1>");
+                        //$("#dniJumbotron").append("<p class='text-center'>Acerque su dispositivo móvil a la pegatina NFC</p>");
+                        //$("#dniJumbotron").append("<button type='button' class='btn btn-success btn-lg' data-toggle='modal' data-target='#nfcALERT'>Solicitar</button>");
+                        /****************************************************************************************************************************************************/
+                        //  DEBUG Code                        
+                        // Read NFC tag
+                        //window.addEventListener("load", initReadNFC,false);
+                        //readNFCTag();  /* ERROR: No reconoce el tipo tag */                                                                               
+                        //discoverTag(); /* FUNCIONA */
+                        //initNdefListener(); /* FUNCIONA */
+                        /****************************************************************************************************************************************************/
+                        // check if is NFC Device                
+                        /*nfc.enabled(
+                            function () {
+                                console.log("index.nfc.enabled.success");
+                                initMimeTypeListener();           
+                            },
+                            function (errorCode) {
+                                console.log("index.nfc.enabled.failure");
+                                var err = errorCode;
 
-                            window.location = "pages/registeredUser.html";
-                        } else {
-                            $("#dniJumbotron").append("<h1 class='text-center'>DNI: "+ localStorage.getItem("dni") + "</h1>");
-                            $("#dniJumbotron").append("<p class='text-center'>Acerque su dispositivo móvil a la pegatina NFC</p>");
-                            //$("#dniJumbotron").append("<button type='button' class='btn btn-success btn-lg' data-toggle='modal' data-target='#nfcALERT'>Solicitar</button>");
-                            // Read NFC tag
-                            //window.addEventListener("load", initReadNFC,false);
-                            //readNFCTag();  /* ERROR: No reconoce el tipo tag */                                                                               
-                            //discoverTag(); /* FUNCIONA */
-                            //initNdefListener(); /* FUNCIONA */
-                            initMimeTypeListener();
-                        }             
-                    },
-                    function (errorCode) {
-                        console.log("index.nfc.enabled.failure");
-                        var err = errorCode;
-
-                        switch (err) {
-                            case "NO_NFC":
-                                console.log("index.nfc.NO_NFC");                    
-                                location.href = "pages/error.html"; 
-                                break; 
-                            case "NFC_DISABLED":
-                                console.log("index.nfc.NFC_DISABLED");                                
-                                //DEBUG: volver al principio                                                                                              
-                                break;
-                            default:
-                                console.log("index.nfc.DEFAULT");
-                        }                    
-                    }             
-                );            
+                                switch (err) {
+                                    case "NO_NFC":
+                                        console.log("index.nfc.NO_NFC");                    
+                                        location.href = "pages/error.html"; 
+                                        break; 
+                                    case "NFC_DISABLED":
+                                        console.log("index.nfc.NFC_DISABLED");                                
+                                        //DEBUG: volver al principio                                                                                              
+                                        break;
+                                    default:
+                                        console.log("index.nfc.DEFAULT");
+                                }                    
+                            }             
+                        );*/
+                    }                                          
+                });                    
             });
-        };
-        /*
-        $(document).on(function() {  
-            alert("Documento cargado");
-        });
-        */
+        }
+
+        function getAmbulance() {
+            // FIRST check if is NFC Device
+            console.log("index.getAmbulance");                  
+            nfc.enabled(
+                function () {
+                    console.log("index.getAmbulance.nfc.enabled.success");
+                    initMimeTypeListener();           
+                },
+                function (errorCode) {
+                    console.log("index.getAmbulance.nfc.enabled.failure");
+                    var err = errorCode;
+
+                    switch (err) {
+                        case "NO_NFC":
+                            console.log("index.getAmbulance.nfc.NO_NFC");                    
+                            location.href = "pages/error.html"; 
+                            break; 
+                        case "NFC_DISABLED":
+                            console.log("index.getAmbulance.nfc.NFC_DISABLED");                                
+                            //DEBUG: volver al principio
+                            activateNFC();                                                                                              
+                            break;
+                        default:
+                            console.log("index.getAmbulance.nfc.DEFAULT");
+                    }                    
+                }             
+            );
+        }     
     </script>
     
     <title>TraSANO</title>
@@ -136,9 +162,10 @@
         </div>
       
         <div class="jumbotron" id="dniJumbotron"></div> 
-        <!-- <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#nfcALERT">Solicitar</button>  -->
-        
-        
+        <hr>
+        <!-- <button type="button" class="btn btn-success btn-lg btn-block" data-toggle="modal" data-target="#nfcALERT">Solicitar</button> -->
+        <a class="btn btn btn-success btn-lg btn-block" href="javascript:getAmbulance();" role="button">Solictar ambulancia</a>
+        <hr>
         <button type="button" class="btn btn-warning btn-lg pull-right" data-toggle="modal" data-target="#claimALERT">Reclamar</button>        
         <button type="button" class="btn btn-danger btn-lg pull-left" data-toggle="modal" data-target="#cancelALERT">Cancelar</button>       
     </div> 
