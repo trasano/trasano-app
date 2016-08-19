@@ -81,7 +81,8 @@
                             //window.addEventListener("load", initReadNFC,false);
                             //readNFCTag();  /* ERROR: No reconoce el tipo tag */                                                                               
                             //discoverTag(); /* FUNCIONA */
-                            initNdefListener();
+                            //initNdefListener(); /* FUNCIONA */
+                            initMimeTypeListener();
                         }             
                     },
                     function (errorCode) {
@@ -94,9 +95,8 @@
                                 location.href = "pages/error.html"; 
                                 break; 
                             case "NFC_DISABLED":
-                                console.log("index.nfc.NFC_DISABLED");
-                                activateNFC();
-                                //DEBUG: volver al principio                                                              
+                                console.log("index.nfc.NFC_DISABLED");                                
+                                //DEBUG: volver al principio                                                                                              
                                 break;
                             default:
                                 console.log("index.nfc.DEFAULT");

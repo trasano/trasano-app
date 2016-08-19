@@ -108,75 +108,26 @@ function cancelAmbulance()
 /*************************************************************************************************************
 * Source: close.html
 **************************************************************************************************************/
-
 function onNdef (nfcEvent) {
-
-    console.log("trasano.onNdef()");
-    var tag = nfcEvent.tag;
-    var tagId = nfc.bytesToHexString(tag.id);                    
-    alert(tagId);
+    console.log(JSON.stringify(nfcEvent.tag));
+    //var tag = nfcEvent.tag;
+    //var tagId = nfc.bytesToHexString(tag.id);                    
+    //alert(tagId);
     navigator.vibrate(500);        
 }
 
-function readNFCTag_1() {
-    nfc.enabled(
-        // SUCCESS
-        function ()
-        {
-            console.log("trasano.readNFCTag.nfc.enabled.success");
-            nfc.addMimeTypeListener(
-                'text/plain',
-                onNdef(),
-                function() {
-                    console.log("SUCCESS. Listening for NDEF mime tags with type text/plain.");
-                    alert("SUCCESS reading NFC tag");
-                },
-                function() {
-                    console.log("FAILURE. Listening for NDEF mime tags with type text/plain.");
-                    alert("ERROR reading NFC tag");
-                }
-            ); 
-        },
-        // FAILURE
-        function (errorCode)
-        {
-            console.log("trasano.readNFCTag.nfc.enabled.failure");
-            var err = errorCode;
-
-            switch (err) {
-                case "NO_NFC":
-                    console.log("trasano.readNFCTag.nfc.NO_NFC");
-                    alert("Dispositivo no compatible con NFC");
-                    location.href = "pages/error.html"; 
-                    break; 
-                case "NFC_DISABLED":
-                    console.log("trasano.readNFCTag.nfc.NFC_DISABLED");
-                    alert("Para solicitar una ambulancia la conexión NFC debe estar ACTIVADA");
-                    activateNFC();                            
-                    break;
-                default:
-                    console.log("trasano.readNFCTag.nfc.DEFAULT");
-            }                    
-        }
-    );               
+function winMime() {
+    console.log("SUCCESS. Listening for NDEF mime tags with type text/plain.");    
 }
 
-function readNFCTag() {    
-    nfc.addMimeTypeListener(
-        'text/plain',
-        onNdef(),
-        function() {
-            console.log("SUCCESS. Listening for NDEF mime tags with type text/plain.");
-            alert("SUCCESS reading NFC tag");
-        },
-        function() {
-            console.log("FAILURE. Listening for NDEF mime tags with type text/plain.");
-            alert("ERROR reading NFC tag");
-        }
-    );                  
+function failMime(reason) {
+    console.log("FAILURE. Listening for NDEF mime tags with type text/plain.");
+    navigator.notification.alert(reason, function() {}, "There was a problem");
 }
 
-
+function initMimeTypeListener() {    
+    nfc.addMimeTypeListener("text/plain", onNdef, winMime, failMime);              
+}
 /*---------------------------------------------------------------------------------------*/
 function nfcListener(nfcEvent) {
     navigator.notification.alert(nfc.bytesToHexString(nfcEvent.tag.id), function() {}, "NFC Tag ID");    
