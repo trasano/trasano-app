@@ -110,7 +110,11 @@ function cancelAmbulance()
 **************************************************************************************************************/
 function onNdef (nfcEvent) {
     console.log(JSON.stringify(nfcEvent.tag));
-    //var tag = nfcEvent.tag;
+    navigator.notification.alert(nfc.bytesToHexString(nfcEvent.tag.id), function() {}, "NFC Tag ID");    
+    
+    var payload = nfcEvent.tag.ndefMessage[0]["payload"];
+    navigator.notification.alert(nfc.bytesToString(payload), function() {}, "NdefMessage payload");
+    
     //var tagId = nfc.bytesToHexString(tag.id);                    
     //alert(tagId);
     navigator.vibrate(500);        
