@@ -20,7 +20,8 @@ function getDNILetter ()
 function saveDNI () 
 { 
     localStorage.setItem("dni", $("#dniNumber").val());
-    alert("Paciente registrado!"); 
+    //alert("Paciente registrado!"); 
+    navigator.notification.alert("DNI: " +  $("#dniNumber").val(), function() {}, "Registrado");
     window.location = "../index.html";                                 
 }
 
@@ -115,7 +116,7 @@ function onNdef (nfcEvent) {
     var tagId = nfc.bytesToHexString(tag.id);                    
     alert(tagId);
     navigator.vibrate(500);        
-};
+}
 
 function readNFCTag_1() {
     nfc.enabled(
@@ -158,7 +159,7 @@ function readNFCTag_1() {
             }                    
         }
     );               
-};
+}
 
 function readNFCTag() {    
     nfc.addMimeTypeListener(
@@ -173,20 +174,41 @@ function readNFCTag() {
             alert("ERROR reading NFC tag");
         }
     );                  
-};
-
-function nfcListener(nfcEvent) {
-    navigator.notification.alert(nfc.bytesToHexString(nfcEvent.tag.id), function() {}, "NFC Tag ID");
 }
 
-function win() {
+
+/*---------------------------------------------------------------------------------------*/
+function nfcListener(nfcEvent) {
+    navigator.notification.alert(nfc.bytesToHexString(nfcEvent.tag.id), function() {}, "NFC Tag ID");    
+    navigator.notification.alert(nfc.bytesToHexString(nfcEvent.type), function() {}, "NFC Tag Type");
+}
+
+function winDiscoverTag() {
     console.log("Added Tag Discovered Listener");
 }
 
-function fail(reason) {
+function failDiscoverTag(reason) {
     navigator.notification.alert(reason, function() {}, "There was a problem");
 }
 
 function discoverTag () {
-     nfc.addTagDiscoveredListener(nfcListener, win, fail);    
-};
+     nfc.addTagDiscoveredListener(nfcListener, winDiscoverTag, failDiscoverTag);    
+}
+/*---------------------------------------------------------------------------------------*/
+function ndefListener(nfcEvent) {
+    console.log(JSON.stringify(nfcEvent.tag));
+    navigator.notification.vibrate(500);
+}
+
+function winNdef() {
+    console.log("Listening for NDEF tags");    
+}
+
+function failNdef(reason) {
+    navigator.notification.alert(reason, function() {}, "There was a problem");
+}
+
+function initNdefListener () {
+     nfc.addNdefListener(ndefListener, winNdef, failNdef);    
+}
+/*---------------------------------------------------------------------------------------*/

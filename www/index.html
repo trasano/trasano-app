@@ -79,8 +79,9 @@
                             //$("#dniJumbotron").append("<button type='button' class='btn btn-success btn-lg' data-toggle='modal' data-target='#nfcALERT'>Solicitar</button>");
                             // Read NFC tag
                             //window.addEventListener("load", initReadNFC,false);
-                            //readNFCTag();                                                    
-                            discoverTag();
+                            //readNFCTag();  /* ERROR: No reconoce el tipo tag */                                                                               
+                            //discoverTag(); /* FUNCIONA */
+                            initNdefListener();
                         }             
                     },
                     function (errorCode) {
