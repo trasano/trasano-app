@@ -114,7 +114,9 @@
             nfc.enabled(
                 function () {
                     console.log("index.getAmbulance.nfc.enabled.success");
-                    initMimeTypeListener();           
+                    initMimeTypeListener(function(){
+                        console.log("index.getAmbulance.initMimeTypeListener.callback.function");
+                    });           
                 },
                 function (errorCode) {
                     console.log("index.getAmbulance.nfc.enabled.failure");
