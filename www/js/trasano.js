@@ -125,7 +125,7 @@ function onNdef (nfcEvent) {
     // Set Ambulance
     var date = new Date();
     var ambulance = {"time" : date.toString(), "location" : nfc.bytesToString(payload)};
-    localStorage.setItem("ambulance", JSON.stringfy(ambulance));
+    localStorage.setItem("ambulance", JSON.stringify(ambulance));
     console.log("trasano.onNdef.localStorage.ambulance: " + JSON.stringfy(ambulance));
     navigator.vibrate(500);        
 }

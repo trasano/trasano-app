@@ -26,6 +26,7 @@
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-tap-highlight" content="no" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    
     <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" /> -->
     <!-- Good default declaration:
@@ -42,9 +43,17 @@
     <link href="dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="dist/css/navbar-static-top.css" rel="stylesheet"> 
+    <link href="dist/css/navbar-static-top.css" rel="stylesheet">
 
-     <!-- JApache Cordova Library -->
+    <style type="text/css">
+        #myProBar {
+          margin: auto;
+          width: 200px;
+          height: 200px;          
+        }
+    </style>
+
+    <!-- JApache Cordova Library -->
     <script type="text/javascript" src="cordova.js"></script>  
 
     <!-- JQuery-mobile -->
@@ -52,6 +61,9 @@
 
     <!-- Custom library -->
     <script type="text/javascript" src="js/trasano.js"></script>
+
+    <!-- Progressbar.js library -->
+    <script type="text/javascript" src="dist/js/progressbar.js"></script>  
 
     <script>          
         // Waiting to phoneGAP ready 
@@ -137,7 +149,41 @@
                     }                    
                 }             
             );
-        }     
+        } 
+
+        function showCancelALERT() {
+            var bar = new ProgressBar.Circle(probarCancel, {
+                strokeWidth: 6,
+                easing: 'easeInOut',
+                duration: 1400,
+                color: '#4AAFCD',
+                trailColor: '#eee',
+                trailWidth: 1,
+                svgStyle: null
+            });
+
+            $('#cancelALERT').modal('hide');
+            $('#probarCancelALERT').modal('show');
+            bar.animate(1.0);  
+            //cancelAmbulance();
+        }
+
+        function showClaimALERT() {          
+            var bar = new ProgressBar.Circle(probarClaim, {
+                strokeWidth: 6,
+                easing: 'easeInOut',
+                duration: 1400,
+                color: '#4AAFCD',
+                trailColor: '#eee',
+                trailWidth: 1,
+                svgStyle: null
+            });
+
+            $('#claimALERT').modal('hide');
+            $('#probarClaimALERT').modal('show');
+            bar.animate(1.0);  
+            //claimAmbulance();
+        }
     </script>
     
     <title>TraSANO</title>
@@ -147,12 +193,12 @@
     <!-- Fixed navbar -->
     <nav class="navbar navbar-default navbar-static-top" role="navigation">
         <div class="container">          
-            <!-- <a class="navbar-brand pull-left" href="../index.html">
-                    <span class="glyphicon glyphicon-arrow-left"></span> 
-            </a> -->
             <a class="navbar-brand pull-right" href="pages/user.html">
                     <span class="glyphicon glyphicon-user"></span> 
-            </a>          
+            </a>
+            <!-- LOGO MÁS PEQUEÑO -->           
+            <!-- <a class="navbar-brand" href="#"><img style="display: inline-block; height: 30px; margin-top: -5px" src="img/salud-madrid-logo.png" alt="TraSANO"></a>    -->      
+            <a class="navbar-brand" href="#"><img style="display: inline-block; height: 40px; margin-top: -10px" src="img/salud-madrid-logo.png" alt="TraSANO"></a>
         </div>
     </nav>
     <!-- Fixed navbar --> 
@@ -169,7 +215,7 @@
         <a class="btn btn btn-success btn-lg btn-block" href="javascript:getAmbulance();" role="button">Solictar ambulancia</a>
         <hr>
         <button type="button" class="btn btn-warning btn-lg pull-right" data-toggle="modal" data-target="#claimALERT">Reclamar</button>        
-        <button type="button" class="btn btn-danger btn-lg pull-left" data-toggle="modal" data-target="#cancelALERT">Cancelar</button>       
+        <button type="button" class="btn btn-danger btn-lg pull-left" data-toggle="modal" data-target="#cancelALERT">Cancelar</button>        
     </div> 
     <!-- /container -->
     
@@ -186,7 +232,7 @@
                 </div>
                 <div class="modal-footer">                    
                     <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                    <a class="btn btn btn-success" href="javascript:closeAmbulance();" role="button">SI</a>
+                    <a class="btn btn btn-primary" href="javascript:closeAmbulance();" role="button">SI</a>
                 </div>
             </div>
         </div>
@@ -198,15 +244,16 @@
         <div class="modal-dialog modal-sm" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4>Solicitar Ambulancia</h4>
+                    <h4>Reclamar Ambulancia</h4>
                 </div>
-                <div class="modal-body">                    
-                    <!-- <a class="btn btn-lg btn-primary" href="javascript:activateNFC();" role="button">Activar NFC</a> -->
-                    <p>¿Desea cancelar la ambulancia?</p>
+                <div class="modal-body">                                        
+                    <p>¿Desea reclamar la ambulancia solicitada?</p>                     
+                    <!-- DEBUG: Mostar datos en un color diferenciado -->
+                    <p>Datos ambulancia</p>                                       
                 </div>
                 <div class="modal-footer">                    
-                    <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                    <a class="btn btn btn-warning" href="javascript:claimAmbulance();" role="button">SI</a>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>                    
+                    <a class="btn btn btn-primary" href="javascript:showClaimALERT();" role="button">SI</a>
                 </div>
             </div>
         </div>
@@ -220,18 +267,56 @@
                 <div class="modal-header">
                     <h4>Cancelar Ambulancia</h4>
                 </div>
-                <div class="modal-body">                    
-                    <!-- <a class="btn btn-lg btn-primary" href="javascript:activateNFC();" role="button">Activar NFC</a> -->
-                    <p>¿Desea cancelar una ambulancia?</p>
+                <div class="modal-body">                                        
+                    <p>¿Desea cancelar la ambulancia?</p>
+                    <!-- DEBUG: Mostar datos en un color diferenciado -->
+                    <p>Datos ambulancia</p>
                 </div>
                 <div class="modal-footer">                    
                     <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                    <a class="btn btn btn-primary" href="javascript:cancelAmbulance();" role="button">SI</a>
+                    <a class="btn btn btn-primary" href="javascript:showCancelALERT();" role="button">SI</a>
                 </div>
             </div>
         </div>
     </div>
-    <!-- /modal -->    
+    <!-- /modal -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="probarCancelALERT" tabindex="-1" role="dialog" aria-labelledby="probarCancelALERTLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                    <h4>Cancelando ambulancia...</h4>
+                </div>
+                <div class="modal-body"> 
+                    <div class="myProBar" id="probarCancel"></div>                
+                </div>
+                 <div class="modal-footer">                    
+                    <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">CANCELAR</button>                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /modal -->
+    
+    <!-- Modal -->
+    <div class="modal fade" id="probarClaimALERT" tabindex="-1" role="dialog" aria-labelledby="probarClaimALERTLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                    <h4>Reclamando ambulancia...</h4>
+                </div>
+                <div class="modal-body"> 
+                    <div class="myProBar" id="probarClaim"></div>                
+                </div>
+                 <div class="modal-footer">                    
+                    <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">CANCELAR</button>                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /modal -->
+
 
     <!-- Bootstrap core JavaScript -->
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
