@@ -154,8 +154,8 @@
         function showCancelALERT() {
             var bar = new ProgressBar.Circle(probarCancel, {
                 strokeWidth: 6,
-                easing: 'easeInOut',
-                duration: 1400,
+                easing: 'bounce',
+                duration: 2000,
                 color: '#4AAFCD',
                 trailColor: '#eee',
                 trailWidth: 1,
@@ -171,17 +171,17 @@
         function showClaimALERT() {          
             var bar = new ProgressBar.Circle(probarClaim, {
                 strokeWidth: 6,
-                easing: 'easeInOut',
-                duration: 1400,
+                easing: 'bounce',
+                duration: 2000,
                 color: '#4AAFCD',
                 trailColor: '#eee',
                 trailWidth: 1,
                 svgStyle: null
             });
-
+            
             $('#claimALERT').modal('hide');
             $('#probarClaimALERT').modal('show');
-            bar.animate(1.0);  
+            bar.animate(1.0);                   
             //claimAmbulance();
         }
     </script>
