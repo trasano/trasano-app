@@ -238,7 +238,7 @@ function showServiceInfo() {
     $("#trasanoModalBody").append(
         "<div class='alert alert-danger' role='alert'>" + 
             "<p><span class='glyphicon glyphicon-warning-sign' aria-hidden='true'></span> " + 
-            "<strong>" + localStorage.getItem("dni") + getDNILetterByParameter(localStorage.getItem("dni")) + "!</strong>" + 
+            "<strong>" + localStorage.getItem("name") + "!</strong>" + 
             " No dispone de servicio de ambulancia.</p>" +
         "</div>" + 
         "<div class='alert alert-info' role='alert'>" + 
@@ -693,7 +693,7 @@ function claimAmbulance() {
  */
 function cancelAmbulance() {
     console.log("trasano.cancelAmbulance()");
-    
+
     $("#probar").empty();
     $("#trasanoModalBody").empty();
     $("#trasanoModalFooter").empty();
