@@ -1,0 +1,20 @@
+#myProBarTest {                 
+    width: 960px;
+    position: relative;
+    margin:0 auto;
+    line-height: 1.4em;
+}
+#myProBar {                 
+    width: 100%;
+    position: relative;
+    margin:0 auto;
+    line-height: 1.4em;
+}
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 60px;
+    background-color: #f5f5f5;
+}
