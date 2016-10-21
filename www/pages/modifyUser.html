@@ -51,38 +51,103 @@
 
     <!-- Custom library -->
     <script type="text/javascript" src="../js/trasano.js"></script>
+    <script type="text/javascript" src="../resource/config.js"></script> 
 
     <title>TraSANO</title>
 
     <script>             
-        $(document).ready(function() {                        
+        $(document).ready(function() { 
+            $("#infoForm").empty();
+            $("#patientJumbotron").empty();
+            if (isAmbulanceOrdered()) {
+                $("#patientFormButton").empty();
+
+                $("#infoForm").append(
+                    "<div class='alert alert-danger' role='alert'>" + 
+                        "<p><span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span> <strong>Aviso!</strong> No se puede modificar el usuario.</p>" +
+                    "</div>" + 
+                    "<div class='alert alert-info' role='alert'>" + 
+                        "<p><span class='glyphicon glyphicon-info-sign' aria-hidden='true'></span> Una ambulancia ha sido <strong>solicitada</strong>.</p>" + 
+                        "<p><span class='glyphicon glyphicon-info-sign' aria-hidden='true'></span> Espere a que finalice el servicio o cancele el servicio si desea modificar el usuario.</p>" + 
+                    "</div>");
+                $("#patientJumbotron").append(
+                    "<form autocomplete='off'>" + 
+                    "<div class='form-group' id='dniForm'>" + 
+                        "<label for='dniNumber'>DNI/NIE</label>" + 
+                        "<div class='input-group'>" +                     
+                            "<input type='text' class='form-control' id='dniNumber' placeholder='Número de DNI' maxlength='8' readonly>" + 
+                            "<div class='input-group-addon' id='dniLetter'></div>" + 
+                        "</div>" + 
+                    "</div>" + 
+                    "<div class='form-group' id='numssForm'>" + 
+                        "<label for='numss'>Código de Tarjeta Sanitaria</label>" + 
+                        "<div class='input-group'>" +                     
+                            "<input type='text' class='form-control' id='numss' placeholder='Tarjeta Sanitaria' maxlength='10' readonly>" + 
+                        "</div>" + 
+                    "</div>" + 
+                    "<div class='form-group' id='patientFormButton'>" +        
+                        "<a class='btn btn-primary' href='user.html'' role='button'>Volver</a>" + 
+                    "</div>" + 
+                "</form>");
+            } else {
+                $("#patientJumbotron").append(
+                    "<form autocomplete='off'>" + 
+                    "<div class='form-group' id='dniForm'>" + 
+                        "<label for='dniNumber'>DNI/NIE</label>" + 
+                        "<div class='input-group'>" +                     
+                            "<input type='text' class='form-control' id='dniNumber' placeholder='Número de DNI' maxlength='8' required>" + 
+                            "<div class='input-group-addon' id='dniLetter'></div>" + 
+                        "</div>" + 
+                    "</div>" + 
+                    "<div class='form-group' id='numssForm'>" + 
+                        "<label for='numss'>Código de Tarjeta Sanitaria</label>" + 
+                        "<div class='input-group'>" +                     
+                            "<input type='text' class='form-control' id='numss' placeholder='Tarjeta Sanitaria' maxlength='10' required>" + 
+                        "</div>" + 
+                    "</div>" + 
+                    "<div class='form-group' id='patientFormButton'>" +        
+                        "<a class='btn btn-primary' href='javascript:registerPatient();' role='button' id='modifyPatientButton'>Aceptar</a>" + 
+                    "</div>" + 
+                "</form>");
+            }
             $("#dniNumber").val(localStorage.getItem("dni"));
+            if (1 < $("#dniNumber").val().length <= 8) {
+                $("#dniLetter").append(getDNILetterByParameter($("#dniNumber").val()));
+            }
+            $("#numss").val(localStorage.getItem("numss"));                    
         });
 
         $(document).on('keyup','#dniNumber', function() {
-            // check if is number
-            if ($("#dniNumber").val().length <= 8) {
+            // check if is number            
+            if (1 < $("#dniNumber").val().length <= 8) {
                 if ($.isNumeric($("#dniNumber").val())) {     
                     // has-success               
-                    $("#dniForm.form-group").removeClass("has-success").removeClass("has-error").addClass("has-success");                
-                    $("#dniLetter").empty();
+                    $("#dniForm.form-group").removeClass("has-success").removeClass("has-error").addClass("has-success");
+                    $("#dniLetter").empty();                
                 } else {
                     // has-error
                     $("#dniForm.form-group").removeClass("has-success").removeClass("has-error").addClass("has-error");
                     $("#dniLetter").empty();
-                }
-            }
-
-            if ($("#dniNumber").val().length == 8) {
-                if ($.isNumeric($("#dniNumber").val())) {
-                    $("#dniLetter").empty();                    
+                }           
+                if ($.isNumeric($("#dniNumber").val())) {                        
+                    $("#dniLetter").empty();
                     $("#dniLetter").append(getDNILetter());
-                    $("#saveDNIButton").removeAttr("disabled");
-                } else {
-                    alert("Número de DNI incorrecto");                    
-                }
-            }                      
+                }  
+            }                                  
         });
+
+        $(document).on('keyup','#numss', function() {
+            // check if is number            
+            if (1 < $("#numss").val().length <= 10) {
+                if ($.isNumeric($("#numss").val())) {     
+                    // has-success               
+                    $("#numssForm.form-group").removeClass("has-success").removeClass("has-error").addClass("has-success");           
+                } else {
+                    // has-error
+                    $("#numssForm.form-group").removeClass("has-success").removeClass("has-error").addClass("has-error");
+                }           
+            }                                  
+        }); 
     </script>
 
 </head>
@@ -104,32 +169,41 @@
         </div>
     </nav> 
     
-
+    <!-- Container -->
     <div class="container">
         <div class="page-header text-center">
-            <h1>MODIFICAR DNI</h1>
+            <h1>MODIFICAR PACIENTE</h1>
         </div>
 
-        <!-- Main component for a primary marketing message or call to action -->
-        <div class="jumbotron">            
-            <form class="form-inline text-center">
-            <div class="form-group" id="dniForm">
-                <div class="input-group">                    
-                    <input type="text" class="form-control" id="dniNumber" placeholder="Número de DNI" maxlength="8" required>
-                    <div class="input-group-addon" id="dniLetter"></div>
+        <div id="infoForm"></div>
+
+        <div class="jumbotron" id="patientJumbotron"></div>
+    </div> 
+    <!-- /container -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="trasanoUserMODAL" tabindex="-1" role="dialog" aria-labelledby="trasanoUserMODALLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div id="trasanoUserModalHeader">
+                    </div>
                 </div>
-            </div>            
-            <a class="btn btn-primary" href="javascript:saveDNI();" role="button" disabled="disabled" id="saveDNIButton">Aceptar</a>
-        </form>
+                <div class="modal-body">
+                    <div id="trasanoUserModalBody"></div>
+                </div>
+                <div class="modal-footer">
+                    <div id="trasanoUserModalFooter"></div>
+                </div>
+            </div>
         </div>
-
-         	
-    </div> <!-- /container -->
+    </div>
+    <!-- /modal -->
 
 	
 	<!-- Bootstrap core JavaScript -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script> -->
     <script src="../dist/js/bootstrap.min.js"></script> 
 	<!-- ================================================== -->
 	

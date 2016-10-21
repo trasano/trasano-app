@@ -51,12 +51,13 @@
 
     <!-- Custom library -->
     <script type="text/javascript" src="../js/trasano.js"></script>
+    <script type="text/javascript" src="../resource/config.js"></script> 
 
     <title>TraSANO</title>
 
     <script>      
-        $( document ).ready(function() {            
-            $("#dniJumbotron").append("<h1 class='text-center'>DNI: "+ localStorage.getItem("dni") + "</h1>");
+        $(document).ready(function() {            
+            showPatient();
         });
     </script>
 
@@ -97,7 +98,7 @@
                 </div>                
                 <div class="modal-footer">                    
                     <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                    <a class="btn btn btn-primary" href="javascript:deleteDNI();" role="button">SI</a>
+                    <a class="btn btn btn-primary" href="javascript:deletePatient();" role="button">SI</a>
                 </div>
             </div>
         </div>
@@ -110,12 +111,32 @@
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <div class="alert alert-info" role="alert">
-                        <h1>¿Modificar dni del paciente?</h1>
+                        <h1>¿Modificar DNI del paciente?</h1>
                     </div>
                 </div>                
                 <div class="modal-footer">                    
                     <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                    <a class="btn btn btn-primary" href="javascript:modifyDNI();" role="button">SI</a>
+                    <a class="btn btn btn-primary" href="modifyUser.html" role="button">SI</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /modal -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="trasanoMODAL" tabindex="-1" role="dialog" aria-labelledby="trasanoMODALLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div id="trasanoModalHeader">
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div id="trasanoModalBody"></div>
+                    <div class="myProBar" id="probar"></div> 
+                </div>
+                <div class="modal-footer">
+                    <div id="trasanoModalFooter"></div>
                 </div>
             </div>
         </div>
@@ -123,8 +144,8 @@
     <!-- /modal -->
 	
 	<!-- Bootstrap core JavaScript -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <!--  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script> -->
     <script src="../dist/js/bootstrap.min.js"></script> 
 	<!-- ================================================== -->
 	

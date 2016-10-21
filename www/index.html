@@ -45,11 +45,18 @@
     <!-- Custom styles for this template -->
     <link href="dist/css/navbar-static-top.css" rel="stylesheet">
 
+    <!-- Este apartado debe ser RESPONSIVE -->
+    <!-- 
+        margin: auto;
+        width: 50px;
+        height: 50px;
+    -->
     <style type="text/css">
-        #myProBar {
-          margin: auto;
-          width: 50px;
-          height: 50px;          
+        #myProBar {                 
+            width: 960px;
+            position: relative;
+            margin:0 auto;
+            line-height: 1.4em;
         }
     </style>
 
@@ -61,9 +68,10 @@
 
     <!-- Custom library -->
     <script type="text/javascript" src="js/trasano.js"></script>
+    <script type="text/javascript" src="resource/config.js"></script> 
 
     <!-- Progressbar.js library -->
-    <script type="text/javascript" src="dist/js/progressbar.js"></script>  
+    <script type="text/javascript" src="dist/js/progressbar.js"></script> 
 
     <script>          
         // Waiting to phoneGAP ready 
@@ -80,7 +88,13 @@
                     if (localStorage.getItem("dni") === null || localStorage.getItem("dni") === "") {               
                         window.location = "pages/registeredUser.html";
                     } else {
-                        $("#dniJumbotron").append("<h1 class='text-center'>DNI: "+ localStorage.getItem("dni") + "</h1>");
+                        // Check if ambulance was ordered more than 6 hours ago
+                        checkAmbulanceServiceTime();
+                        // Update ambulance service
+                        infoAmbulance();
+                        // Show patient info 
+                        showPatient();
+
                         //$("#dniJumbotron").append("<p class='text-center'>Acerque su dispositivo móvil a la pegatina NFC</p>");
                         //$("#dniJumbotron").append("<button type='button' class='btn btn-success btn-lg' data-toggle='modal' data-target='#nfcALERT'>Solicitar</button>");
                         /****************************************************************************************************************************************************/
@@ -115,17 +129,43 @@
                                 }                    
                             }             
                         );*/
-                    }                                          
+                    }
+                    // CREATE FUNCTION TO CHECK IF AMBULANCE IS OUT OF DATE
+                    if (localStorage.getItem("serviceTime") != null && localStorage.getItem("serviceTime") != "") {
+                        var serviceTime = new Date(parseInt(localStorage.getItem("serviceTime")));
+                        //serviceTime.setTime(parseInt(localStorage.getItem("serviceTime")));   
+
+                        $("#getAmbulanceButton").empty();
+                        $("#getAmbulanceButton").append(
+                            "<div class='alert alert-info' role='alert'>" +
+                                "<a class='text-right' href='javascript:showAmbulanceInfo();''>" + 
+                                "<span class='glyphicon glyphicon-eye-open' aria-hidden='true'></span>   " +  
+                                "Ambulancia solicitada: <strong>" 
+                                    + serviceTime.toLocaleTimeString() + " (" + serviceTime.toLocaleDateString() + ")</strong></a>" + 
+                            "</div>"
+                        );    
+                        $("#claimAndCancelButton").append(
+                            "<a class='btn btn-warning btn-lg pull-right' href='javascript:showClaimMODAL();'' role='button'>" + 
+                            "Reclamar</a>" + 
+                            "<a class='btn btn-danger btn-lg pull-left' href='javascript:showCancelMODAL();'' role='button'>" + 
+                            "Cancelar</a>");
+                    } else {
+                        $("#claimAndCancelButton").empty();
+                        $("#getAmbulanceButton").append(
+                        "<a class='btn btn btn-success btn-lg btn-block' href='javascript:showCloseMODAL();'' role='button'>" + 
+                        "Solicitar ambulancia</a>");
+                    }
                 });                    
             });
         }
 
         function getAmbulance() {
             // FIRST check if is NFC Device
-            console.log("index.getAmbulance");                  
+            console.log("index.getAmbulance");
             nfc.enabled(
                 function () {
                     console.log("index.getAmbulance.nfc.enabled.success");
+                    $('#trasanoMODAL').modal('show');
                     initMimeTypeListener(function(){
                         console.log("index.getAmbulance.initMimeTypeListener.callback.function");
                     });           
@@ -149,40 +189,6 @@
                     }                    
                 }             
             );
-        } 
-
-        function showCancelALERT() {
-            var bar = new ProgressBar.Circle(probarCancel, {
-                strokeWidth: 6,
-                easing: 'bounce',
-                duration: 2000,
-                color: '#4AAFCD',
-                trailColor: '#eee',
-                trailWidth: 1,
-                svgStyle: null
-            });
-
-            $('#cancelALERT').modal('hide');
-            $('#probarCancelALERT').modal('show');
-            bar.animate(1.0);  
-            //cancelAmbulance();
-        }
-
-        function showClaimALERT() {          
-            var bar = new ProgressBar.Circle(probarClaim, {
-                strokeWidth: 6,
-                easing: 'bounce',
-                duration: 2000,
-                color: '#4AAFCD',
-                trailColor: '#eee',
-                trailWidth: 1,
-                svgStyle: null
-            });
-            
-            $('#claimALERT').modal('hide');
-            $('#probarClaimALERT').modal('show');
-            bar.animate(1.0);                   
-            //claimAmbulance();
         }
     </script>
     
@@ -208,119 +214,35 @@
         <div class="page-header text-center">
             <h1>SERVICIO</h1>
         </div>
-      
         <div class="jumbotron" id="dniJumbotron"></div> 
-        <hr>
-        <!-- <button type="button" class="btn btn-success btn-lg btn-block" data-toggle="modal" data-target="#nfcALERT">Solicitar</button> -->
-        <a class="btn btn btn-success btn-lg btn-block" href="javascript:getAmbulance();" role="button">Solictar ambulancia</a>
-        <hr>
-        <button type="button" class="btn btn-warning btn-lg pull-right" data-toggle="modal" data-target="#claimALERT">Reclamar</button>        
-        <button type="button" class="btn btn-danger btn-lg pull-left" data-toggle="modal" data-target="#cancelALERT">Cancelar</button>        
+        <!-- <hr> -->      
+        <div id="getAmbulanceButton"></div>
+        <!-- <hr> --> 
+        <div id="claimAndCancelButton"></div>   
     </div> 
-    <!-- /container -->
-    
+    <!-- /container -->  
+
     <!-- Modal -->
-    <div class="modal fade" id="nfcALERT" tabindex="-1" role="dialog" aria-labelledby="nfcALERTLabel">
+    <div class="modal fade" id="trasanoMODAL" tabindex="-1" role="dialog" aria-labelledby="trasanoMODALLabel">
         <div class="modal-dialog modal-sm" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4>Solicitar Ambulancia</h4>
+                    <div id="trasanoModalHeader">
+                    </div>
                 </div>
-                <div class="modal-body">                    
-                    <!-- <a class="btn btn-lg btn-primary" href="javascript:activateNFC();" role="button">Activar NFC</a> -->
-                    <p>¿Desea solicitar una ambulancia?</p>
+                <div class="modal-body">
+                    <div id="trasanoModalBody"></div>
+                    <div class="myProBar" id="probar"></div> 
                 </div>
-                <div class="modal-footer">                    
-                    <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                    <a class="btn btn btn-primary" href="javascript:closeAmbulance();" role="button">SI</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- /modal -->
-
-    <!-- Modal -->
-    <div class="modal fade" id="claimALERT" tabindex="-1" role="dialog" aria-labelledby="claimALERTLabel">
-        <div class="modal-dialog modal-sm" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4>Reclamar Ambulancia</h4>
-                </div>
-                <div class="modal-body">                                        
-                    <p>¿Desea reclamar la ambulancia solicitada?</p>                     
-                    <!-- DEBUG: Mostar datos en un color diferenciado -->
-                    <p>Datos ambulancia</p>                                       
-                </div>
-                <div class="modal-footer">                    
-                    <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>                    
-                    <a class="btn btn btn-primary" href="javascript:showClaimALERT();" role="button">SI</a>
+                <div class="modal-footer">
+                    <div id="trasanoModalFooter"></div>
                 </div>
             </div>
         </div>
     </div>
     <!-- /modal -->
-
-    <!-- Modal -->
-    <div class="modal fade" id="cancelALERT" tabindex="-1" role="dialog" aria-labelledby="cancelALERTLabel">
-        <div class="modal-dialog modal-sm" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4>Cancelar Ambulancia</h4>
-                </div>
-                <div class="modal-body">                                        
-                    <p>¿Desea cancelar la ambulancia?</p>
-                    <!-- DEBUG: Mostar datos en un color diferenciado -->
-                    <p>Datos ambulancia</p>
-                </div>
-                <div class="modal-footer">                    
-                    <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                    <a class="btn btn btn-primary" href="javascript:showCancelALERT();" role="button">SI</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- /modal -->
-
-    <!-- Modal -->
-    <div class="modal fade" id="probarCancelALERT" tabindex="-1" role="dialog" aria-labelledby="probarCancelALERTLabel">
-        <div class="modal-dialog modal-sm" role="document">
-            <div class="modal-content">
-               <div class="modal-header">
-                    <h4>Cancelando ambulancia...</h4>
-                </div>
-                <div class="modal-body"> 
-                    <div class="myProBar" id="probarCancel"></div>                
-                </div>
-                 <div class="modal-footer">                    
-                    <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">CANCELAR</button>                    
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- /modal -->
-    
-    <!-- Modal -->
-    <div class="modal fade" id="probarClaimALERT" tabindex="-1" role="dialog" aria-labelledby="probarClaimALERTLabel">
-        <div class="modal-dialog modal-sm" role="document">
-            <div class="modal-content">
-               <div class="modal-header">
-                    <h4>Reclamando ambulancia...</h4>
-                </div>
-                <div class="modal-body"> 
-                    <div class="myProBar" id="probarClaim"></div>                
-                </div>
-                 <div class="modal-footer">                    
-                    <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">CANCELAR</button>                    
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- /modal -->
-
 
     <!-- Bootstrap core JavaScript -->
-    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="assets/js/vendor/jquery.min.js"><\/script>')</script>-->
     <script src="dist/js/bootstrap.min.js"></script>
     <!-- ================================================== -->
 </body>
