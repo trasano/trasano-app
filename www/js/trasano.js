@@ -13,10 +13,9 @@
  * Returns: Letter of DNI number
  */
 function getDNILetter () { 
-    console.log("registeredUser.getDNILetter");
     dniLetter ="TRWAGMYFPDXBNJZSQVHLCKET"; 
     position = $("#dniNumber").val() % 23;                        
-    return dniLetter.substring(position,position+1);                        
+    return dniLetter.substring(position, position+1);                        
 }
 /* 
  * Expects: DNI number
@@ -25,7 +24,18 @@ function getDNILetter () {
 function getDNILetterByParameter (dni) { 
     dniLetter ="TRWAGMYFPDXBNJZSQVHLCKET"; 
     position = dni % 23;                        
-    return dniLetter.substring(position,position+1);                        
+    return dniLetter.substring(position, position+1);                        
+}
+/*************************************************************************************************************
+* TAG functions
+**************************************************************************************************************/
+/* 
+ * Expects: String
+ * Returns: Tag Code
+ */
+function getTagCode (tagcode) {
+    position = tagcode.trim().indexOf(".");                       
+    return tagcode.trim().substring(position+1, tagcode.length);                        
 }
 /*************************************************************************************************************
 * SERVICE_TIME functions
@@ -67,6 +77,37 @@ function showPatient() {
         "<h1 class='text-justify'>"+ localStorage.getItem("dni") + getDNILetterByParameter(localStorage.getItem("dni")) + "</h1>" +
         "<p class='text-justify'> " + localStorage.getItem("name") + " " + localStorage.getItem("surname") + "</p>" +    
         "<small class='text-justify'> " + localStorage.getItem("patientHome") + ".</small>");
+}
+/* 
+ * Expects: void
+ * Returns: Check if a user can modify DNI and NUMSS. True -> modifyUser.html ; False -> show modal
+ */
+function modifyPatient() {
+    if (isAmbulanceOrdered()) {
+            $('#modifyALERT').modal('hide');
+            $("#trasanoModalHeader").empty();
+            $("#trasanoModalBody").empty();
+            $("#trasanoModalFooter").empty();
+
+            $("#trasanoModalHeader").append("<h4>Modificar paciente</h4>");
+            $("#trasanoModalBody").append(
+                "<div class='alert alert-danger' role='alert'>" + 
+                    "<p><span class='glyphicon glyphicon-alert' aria-hidden='true'></span> " + 
+                    "<strong>Aviso!</strong> No se puede modificar el usuario.</p>" +
+                "</div>" + 
+                "<div class='alert alert-info' role='alert'>" + 
+                    "<p><span class='glyphicon glyphicon-info-sign' aria-hidden='true'></span> Una ambulancia ha sido <strong>solicitada</strong>.</p>" + 
+                    "<p><span class='glyphicon glyphicon-info-sign' aria-hidden='true'>" + 
+                    "</span> Espere a que finalice el servicio o cancele el servicio si desea eliminar el usuario.</p>" + 
+                "</div>"
+            ); 
+            $("#trasanoModalFooter").append("<button type='button' class='btn btn-primary' data-dismiss='modal'>CERRAR</button>");
+            $('#trasanoMODAL').modal('show');
+
+    } else {
+        //navigator.notification.vibrate(500);
+        window.location = "modifyUser.html";
+    }               
 }
 /* 
  * Expects: void
@@ -276,8 +317,10 @@ function showClaimMODAL() {
     } else {
         $("#trasanoModalBody").append(
             "<div class='alert alert-danger' role='alert'>" + 
-                "<span class='glyphicon glyphicon-alert' aria-hidden='true'></span> " + 
-                "<strong>No se puede reclamar la ambulancia:</strong> Debe pasar una hora desde la última reclamación.</div>" + 
+                "<p><span class='glyphicon glyphicon-alert' aria-hidden='true'></span> " + 
+                    "<strong>No se puede reclamar la ambulancia!</strong></p>" + 
+                "<p><span class='glyphicon glyphicon-alert' aria-hidden='true'></span> " + 
+                    "Debe pasar <strong>una hora</strong> desde la última reclamación.</div></p>" + 
             "<div class='alert alert-warning' role='alert'>" + 
                 "<span class='glyphicon glyphicon-info-sign' aria-hidden='true'></span> " + 
                 "Última reclamación: <strong>" + getClaimTime().toLocaleTimeString() + 
@@ -336,19 +379,19 @@ function showCloseMODAL() {
     /***********************************
     * MOCK 
     ************************************/
-    setTimeout(getAmbulance_MOCK, 2000);
+    //setTimeout(getAmbulance_MOCK, 2000);
 
     /***********************************
     * PRODUCTION 
     ************************************/
-    //getAmbulance();
+    getAmbulance();
 }
 /* 
  * Expects: void
  * Returns: Show reason textarea for cancel option
  */
 function showCancelReasonALERT() {
-    $("#probar").empty();
+    $("#probar").remove();
     $("#trasanoModalBody").append(
         "<div class='form-group'>" + 
             "<label for='message-text' class='control-label'>Motivo:</label>" + 
@@ -368,11 +411,12 @@ function showCancelALERT() {
     
     $("#trasanoModalBody").empty();
     $("#trasanoModalFooter").empty();
-    $("#probar").empty();
+    $("#probar").remove();
 
+    $("#trasanoModalBody").append("<div class='myProBar' id='probar'></div>");
     $("#trasanoModalFooter").append(
         "<button type='button' class='btn btn-danger pull-right' data-dismiss='modal'>CANCELAR</button>");
-         
+
     var bar = new ProgressBar.Circle(probar, {
         strokeWidth: 6,
         easing: 'bounce',
@@ -393,8 +437,9 @@ function showCancelALERT() {
 function showClaimALERT() {
     $("#trasanoModalBody").empty();
     $("#trasanoModalFooter").empty();
-    $("#probar").empty();
+    $("#probar").remove();
 
+    $("#trasanoModalBody").append("<div class='myProBar' id='probar'></div>");
     $("#trasanoModalFooter").append(
         "<button type='button' class='btn btn-danger pull-right' data-dismiss='modal'>CANCELAR</button>");  
             
@@ -634,7 +679,7 @@ function closeAmbulance() {
  */
 function claimAmbulance() {
     console.log("trasano.claimAmbulance()");
-    $("#probar").empty();
+    $("#probar").remove();
     $("#trasanoModalBody").empty();
     $("#trasanoModalFooter").empty();
     var dni = localStorage.getItem("dni") + getDNILetterByParameter(localStorage.getItem("dni"));
@@ -694,7 +739,7 @@ function claimAmbulance() {
 function cancelAmbulance() {
     console.log("trasano.cancelAmbulance()");
 
-    $("#probar").empty();
+    $("#probar").remove();
     $("#trasanoModalBody").empty();
     $("#trasanoModalFooter").empty();
 
@@ -779,8 +824,10 @@ function onNdef (nfcEvent) {
 
     $("#trasanoModalHeader").empty();
     $("#trasanoModalBody").empty();
-    $("#probar").empty();
+    $("#probar").remove();
     $("#trasanoModalHeader").append("<h4>Solicitando ambulancia...</h4>");
+    $("#trasanoModalBody").append("<div class='myProBar' id='probar'></div>");
+    
     bar.animate(1.0);
 
     // Get tag message
@@ -797,7 +844,8 @@ function onNdef (nfcEvent) {
     //localStorage.setItem("ambulance", JSON.stringify(ambulance));
     //console.log("trasano.onNdef.localStorage.ambulance: " + JSON.stringify(ambulance));
 
-    var tagCode = nfc.bytesToString(payload);
+    var fullTagCode = nfc.bytesToString(payload);
+    var tagCode = getTagCode(fullTagCode);
     
     //navigator.notification.alert(nfc.bytesToHexString(nfcEvent.tag.id), function() {}, "NFC Tag ID"); 
     //navigator.notification.alert(nfc.bytesToString(payload), function() {}, "NdefMessage payload");
@@ -815,7 +863,7 @@ function onNdef (nfcEvent) {
             error: function (jqXHR, textStatus, errorThrown){
                 navigator.notification.vibrate(500);
                 console.log("Close.Error: " + textStatus +  ", throws: " + errorThrown);
-                $("#probar").empty();
+                $("#probar").remove();
                 $("#trasanoModalBody").empty(); 
                 $("#trasanoModalBody").append("<div class='alert alert-danger' role='alert'>" +
                     "<span class='glyphicon glyphicon-alert' aria-hidden='true'></span> " +  
@@ -843,7 +891,7 @@ function onNdef (nfcEvent) {
                     };
                     localStorage.setItem("ambulance", JSON.stringify(ambulance));
 
-                    $("#probar").empty();
+                    $("#probar").remove();
                     $("#trasanoModalBody").empty();  
                     $("#trasanoModalBody").append("<div class='alert alert-success' role='alert'>" + 
                         "<p><span class='glyphicon glyphicon-ok' aria-hidden='true'></span> <strong>La ambulancia ha sido solicitada!</strong></p>" + 
@@ -853,7 +901,7 @@ function onNdef (nfcEvent) {
                     $("#trasanoModalFooter").append(
                         "<a class='btn btn-primary pull-right' href='javascript:closeTrasanoModal();' role='button'>CERRAR</a>");  
                 } else {
-                    $("#probar").empty();
+                    $("#probar").remove();
                     $("#trasanoModalBody").empty(); 
                     $("#trasanoModalBody").append("<div class='alert alert-danger' role='alert'>" + 
                         "<span class='glyphicon glyphicon-alert' aria-hidden='true'></span> " + 
@@ -954,38 +1002,15 @@ function initNdefListener () {
      nfc.addNdefListener(ndefListener, winNdef, failNdef);    
 }
 /*************************************************************************************************************
-* Show progessBar ALERT
-**************************************************************************************************************/
-/* 
- * Expects: void
- * Returns: Create infinite progress bar
- */
-function infiniteProgressBar() {   
-    // Create ProgessBar
-    var bar = new ProgressBar.Circle(probar, {
-    strokeWidth: 3,
-    easing: 'easeInOut',
-    duration: 2000,
-    color: '#4AAFCD',
-    trailColor: '#eee',
-    trailWidth: 1,
-    svgStyle: null
-    });   
-    
-    bar.animate(1.0);
-    var date = new Date();
-    console.log("trasano.initMimeTypeListener_MOCK.infiniteProgressBar: " + date.toLocaleTimeString());            
-    //bar.destroy();   
-}
-/*************************************************************************************************************
 * MOCK functions
 **************************************************************************************************************/
 function getAmbulance_MOCK() {
     $("#trasanoModalHeader").empty();
     $("#trasanoModalBody").empty();
-    $("#probar").empty();
+    $("#probar").remove();
 
     $("#trasanoModalHeader").append("<h4>Solicitando ambulancia...</h4>");
+    $("#trasanoModalBody").append("<div class='myProBar' id='probar'></div>");
 
     var bar = new ProgressBar.Circle(probar, {
         strokeWidth: 6,
@@ -1018,7 +1043,7 @@ function initMimeTypeListener_MOCK() {
 
             // MOCK: Set Ambulance
             var serviceTime = new Date();
-            var tagCode = "1";
+            var tagCode = getTagCode("es.1");
             var dni = localStorage.getItem("dni") + getDNILetterByParameter(localStorage.getItem("dni"));
 
             // DEBUG -> DELETE with WS started
@@ -1043,7 +1068,7 @@ function initMimeTypeListener_MOCK() {
                     error: function (jqXHR, textStatus, errorThrown){
                         //navigator.notification.vibrate(500);
                         console.log("Close.Error: " + textStatus +  ", throws: " + errorThrown);
-                        $("#probar").empty();
+                        $("#probar").remove();
                         $("#trasanoModalBody").empty(); 
                         $("#trasanoModalBody").append("<div class='alert alert-danger' role='alert'>" +
                             "<span class='glyphicon glyphicon-alert' aria-hidden='true'></span> " +  
@@ -1071,7 +1096,7 @@ function initMimeTypeListener_MOCK() {
                             };
                             localStorage.setItem("ambulance", JSON.stringify(ambulance));
 
-                            $("#probar").empty();
+                            $("#probar").remove();
                             $("#trasanoModalBody").empty();  
                             $("#trasanoModalBody").append("<div class='alert alert-success' role='alert'>" + 
                                 "<p><span class='glyphicon glyphicon-ok' aria-hidden='true'></span> <strong>La ambulancia ha sido solicitada!</strong></p>" + 
@@ -1081,7 +1106,7 @@ function initMimeTypeListener_MOCK() {
                             $("#trasanoModalFooter").append(
                                 "<a class='btn btn-primary pull-right' href='javascript:closeTrasanoModal();' role='button'>CERRAR</a>");  
                         } else {
-                            $("#probar").empty();
+                            $("#probar").remove();
                             $("#trasanoModalBody").empty(); 
                             $("#trasanoModalBody").append("<div class='alert alert-danger' role='alert'>" + 
                                 "<span class='glyphicon glyphicon-alert' aria-hidden='true'></span> " + 
