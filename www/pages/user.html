@@ -44,7 +44,7 @@
     <link href="../dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="../dist/css/navbar-static-top.css" rel="stylesheet">
+    <!-- <link href="../dist/css/navbar-static-top.css" rel="stylesheet"> -->
     <link href="../dist/css/trasano.css" rel="stylesheet">
     
 
@@ -69,9 +69,9 @@
 	<!-- Fixed navbar -->
 	<nav class="navbar navbar-default navbar-static-top" role="navigation">
         <div class="container">			
-            <!-- <a class="navbar-brand pull-left" href="../index.html">
-                    <span class="glyphicon glyphicon-arrow-left"></span> 
-            </a> -->
+            <a class="navbar-brand pull-right" href="../index.html">
+                    <span class="glyphicon glyphicon-home"></span> 
+            </a>
             <a class="navbar-brand" href="../index.html"><img style="display: inline-block; height: 40px; margin-top: -10px" src="../img/salud-madrid-logo.png" alt="TraSANO"></a>                 
         </div>
     </nav> 
@@ -118,7 +118,7 @@
                 </div>                
                 <div class="modal-footer">                    
                     <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                    <a class="btn btn btn-primary" href="modifyUser.html" role="button">SI</a>
+                    <a class="btn btn btn-primary" href="javascript:modifyPatient();" role="button">SI</a>
                 </div>
             </div>
         </div>
@@ -135,7 +135,6 @@
                 </div>
                 <div class="modal-body">
                     <div id="trasanoModalBody"></div>
-                    <div class="myProBar" id="probar"></div> 
                 </div>
                 <div class="modal-footer">
                     <div id="trasanoModalFooter"></div>
@@ -147,7 +146,7 @@
 
     <footer class="footer">
       <div class="container">
-        <p class="text-muted pull-right">Trasano &copy; 2016</p>
+        <p class="text-muted pull-right">&copy; 2016 Trasano.</p>
       </div>
     </footer>
 	

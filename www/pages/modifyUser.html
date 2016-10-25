@@ -44,7 +44,7 @@
     <link href="../dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="../dist/css/navbar-static-top.css" rel="stylesheet">
+    <!-- <link href="../dist/css/navbar-static-top.css" rel="stylesheet"> -->
     <link href="../dist/css/trasano.css" rel="stylesheet">    
 
     <!-- JQuery-mobile -->
@@ -62,15 +62,6 @@
             $("#patientJumbotron").empty();
             if (isAmbulanceOrdered()) {
                 $("#patientFormButton").empty();
-
-                $("#infoForm").append(
-                    "<div class='alert alert-danger' role='alert'>" + 
-                        "<p><span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span> <strong>Aviso!</strong> No se puede modificar el usuario.</p>" +
-                    "</div>" + 
-                    "<div class='alert alert-info' role='alert'>" + 
-                        "<p><span class='glyphicon glyphicon-info-sign' aria-hidden='true'></span> Una ambulancia ha sido <strong>solicitada</strong>.</p>" + 
-                        "<p><span class='glyphicon glyphicon-info-sign' aria-hidden='true'></span> Espere a que finalice el servicio o cancele el servicio si desea modificar el usuario.</p>" + 
-                    "</div>");
                 $("#patientJumbotron").append(
                     "<form autocomplete='off'>" + 
                     "<div class='form-group' id='dniForm'>" + 
@@ -176,8 +167,6 @@
             <h1>MODIFICAR PACIENTE</h1>
         </div>
 
-        <div id="infoForm"></div>
-
         <div class="jumbotron" id="patientJumbotron"></div>
     </div> 
     <!-- /container -->
@@ -203,7 +192,7 @@
 
     <footer class="footer">
       <div class="container">
-        <p class="text-muted pull-right">Trasano &copy; 2016</p>
+        <p class="text-muted pull-right">&copy; 2016 Trasano.</p>
       </div>
     </footer>
 	
