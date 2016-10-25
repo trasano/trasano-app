@@ -887,7 +887,7 @@ function onNdef (nfcEvent) {
 
     var fullTagCode = nfc.bytesToString(payload);
     var tagCode = getTagCode(fullTagCode);
-    navigator.notification.alert(tagcode, function() {}, "NFC TAG message");
+    navigator.notification.alert(tagCode, function() {}, "NFC TAG message");
     
     closeAmbulance(tagCode);
     
