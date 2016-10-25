@@ -154,7 +154,8 @@
                     $('#trasanoMODAL').modal('show');
                     initMimeTypeListener(function(){
                         console.log("index.getAmbulance.initMimeTypeListener.callback.function");
-                    });           
+                    }); 
+                    closeAmbulance();       
                 },
                 function (errorCode) {
                     console.log("index.getAmbulance.nfc.enabled.failure");
