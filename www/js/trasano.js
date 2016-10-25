@@ -824,15 +824,15 @@ function onNdef (nfcEvent) {
     });
 
     $("#trasanoModalHeader").empty();
-    navigator.notification.alert(nfc.bytesToHexString("done", "trasanoModalHeader");
+    navigator.notification.alert("done", "trasanoModalHeader");
     $("#trasanoModalBody").empty();
-    navigator.notification.alert(nfc.bytesToHexString("done", "trasanoModalBody");
+    navigator.notification.alert("done", "trasanoModalBody");
     $("#probar").remove();
-    navigator.notification.alert(nfc.bytesToHexString("done", "probar");
+    navigator.notification.alert("done", "probar");
     $("#trasanoModalHeader").append("<h4>Solicitando ambulancia...</h4>");
-    navigator.notification.alert(nfc.bytesToHexString("done", "trasanoModalHeader.new");
+    navigator.notification.alert("done", "trasanoModalHeader.new");
     $("#trasanoModalBody").append("<div class='myProBar' id='probar'></div>");
-    navigator.notification.alert(nfc.bytesToHexString("done", "trasanoModalBody.new");
+    navigator.notification.alert("done", "trasanoModalBody.new");
     
     bar.animate(1.0);
 
