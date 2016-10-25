@@ -813,7 +813,7 @@ function onNdef (nfcEvent) {
     navigator.notification.alert(nfc.bytesToHexString(nfcEvent.tag.id), function() {}, "NFC Tag ID");
     navigator.notification.vibrate(500);
 
-    var bar = new ProgressBar.Circle(probar, {
+    /*var bar = new ProgressBar.Circle(probar, {
         strokeWidth: 6,
         easing: 'bounce',
         duration: 1000,
@@ -821,7 +821,7 @@ function onNdef (nfcEvent) {
         trailColor: '#eee',
         trailWidth: 1,
         svgStyle: null
-    });
+    });*/
 
     $("#trasanoModalHeader").empty();
     navigator.notification.alert("done", "trasanoModalHeader");
@@ -834,7 +834,7 @@ function onNdef (nfcEvent) {
     $("#trasanoModalBody").append("<div class='myProBar' id='probar'></div>");
     navigator.notification.alert("done", "trasanoModalBody.new");
     
-    bar.animate(1.0);
+    //bar.animate(1.0);
 
     // Get tag message
     var payload = nfcEvent.tag.ndefMessage[0]["payload"];
