@@ -515,6 +515,7 @@ function registerPatient() {
                 data: {dni: dni, numss: $("#numss").val()},
                 url: "http://trasano.org:8080/patient/login",
                 error: function (jqXHR, textStatus, errorThrown){
+                    //navigator.notification.vibrate([1000, 1000, 1000, 1000, 1000]);
                     console.log("RegisterPatient.Error: " + textStatus +  ", throws: " + errorThrown);
 
                     $("#trasanoUserModalBody").append("<div class='alert alert-danger' role='alert'>" + 
@@ -597,6 +598,7 @@ function infoAmbulance() {
         url: "http://trasano.org:8080/patient/info",
         error: function (jqXHR, textStatus, errorThrown){
             console.log("trasano.infoAmbulance.Error: " + textStatus +  ", throws: " + errorThrown);
+            //navigator.notification.vibrate([1000, 1000, 1000, 1000, 1000]);
             $("#getAmbulanceButton").empty();
             $("#getAmbulanceButton").append(
                 "<div class='alert alert-danger' role='alert'>" + 
@@ -767,7 +769,7 @@ function cancelAmbulance() {
  * WS_Data_INPUT = {dni} 
  * WS_Data_OUTPUT = {companyAmbulance, numAmbulance, name, surname, serviceTime}
  */
-function closeAmbulance() {
+function closeAmbulance(tagCode) {
     console.log("trasano.closeAmbulance()");
 
     $("#trasanoModalHeader").empty();
@@ -775,6 +777,11 @@ function closeAmbulance() {
     $("#probar").remove();
     $("#trasanoModalHeader").append("<h4>Solicitando ambulancia...</h4>");
     $("#trasanoModalBody").append("<div class='myProBar' id='probar'></div>");
+
+    // Load progress bar library
+    $.getScript("../dist/js/progressbar.js", function(){
+        alert("Script loaded but not necessarily executed.");
+    });
 
     var bar = new ProgressBar.Circle(probar, {
         strokeWidth: 6,
@@ -788,7 +795,6 @@ function closeAmbulance() {
     
     bar.animate(1.0);
 
-    var tagCode = localStorage.getItem("tagcode");
     var dni = localStorage.getItem("dni") + getDNILetterByParameter(localStorage.getItem("dni"));
 
     window.setTimeout(function () {
@@ -802,7 +808,7 @@ function closeAmbulance() {
             data: {dni: dni, tagcode: tagCode},
             url: "http://trasano.org:8080/patient/close",
             error: function (jqXHR, textStatus, errorThrown){
-                navigator.notification.vibrate(500);
+                navigator.notification.vibrate([1000, 1000, 1000, 1000, 1000]);
                 console.log("Close.Error: " + textStatus +  ", throws: " + errorThrown);
                 $("#probar").remove();
                 $("#trasanoModalBody").empty(); 
@@ -851,6 +857,7 @@ function closeAmbulance() {
                     $("#trasanoModalFooter").append("<button type='button' class='btn btn-primary pull-right' data-dismiss='modal'>" + 
                     "CERRAR</button>"); 
                 }
+                window.location.reload();
             }
         });
     }, 
@@ -882,8 +889,7 @@ function onNdef (nfcEvent) {
     //var tagCode = getTagCode(fullTagCode);
     var tagcode = getTagCode(nfc.bytesToString(payload));
     navigator.notification.alert(tagcode, function() {}, "NFC TAG message");
-    localStorage.setItem("tagcode", tagcode);
-    //closeAmbulance(tagCode);
+    closeAmbulance(tagCode);
     
     //navigator.notification.alert(nfc.bytesToHexString(nfcEvent.tag.id), function() {}, "NFC Tag ID"); 
     //navigator.notification.alert(nfc.bytesToString(payload), function() {}, "NdefMessage payload");
@@ -1039,7 +1045,7 @@ function initMimeTypeListener_MOCK() {
                     data: {dni: dni, tagcode: tagCode},
                     url: "http://trasano.org:8080/patient/close",
                     error: function (jqXHR, textStatus, errorThrown){
-                        //navigator.notification.vibrate(500);
+                        //navigator.notification.vibrate([1000, 1000, 1000, 1000, 1000]);
                         console.log("Close.Error: " + textStatus +  ", throws: " + errorThrown);
                         $("#probar").remove();
                         $("#trasanoModalBody").empty(); 
