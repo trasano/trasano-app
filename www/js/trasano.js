@@ -380,11 +380,12 @@ function showCloseMODAL() {
     * MOCK 
     ************************************/
     //setTimeout(getAmbulance_MOCK, 2000);
+    setTimeout(closeAmbulance("1"), 2000);
 
     /***********************************
     * PRODUCTION 
     ************************************/
-    getAmbulance();
+    //getAmbulance();
 }
 /* 
  * Expects: void
@@ -776,12 +777,16 @@ function closeAmbulance(tagCode) {
     $("#trasanoModalBody").empty();
     $("#probar").remove();
     $("#trasanoModalHeader").append("<h4>Solicitando ambulancia...</h4>");
-    $("#trasanoModalBody").append("<div class='myProBar' id='probar'></div>");
-
-    // Load progress bar library
-    $.getScript("../dist/js/progressbar.js", function(){
-        alert("Script loaded but not necessarily executed.");
-    });
+    $("#trasanoModalBody").append(
+        "<div class='progress' id='probar'>" +
+            "<div class='progress-bar progress-bar-striped active' role='progressbar' aria-valuenow='45' aria-valuemin='0' aria-valuemax='100' style='width: 0%'>" +
+                "<span class='sr-only'></span>" +
+                "</div></div>");
+    
+    $(".progress-bar").animate({
+        width: "100%"
+    }, 3000);
+/*    $("#trasanoModalBody").append("<div class='myProBar' id='probar'></div>");
 
     var bar = new ProgressBar.Circle(probar, {
         strokeWidth: 6,
@@ -793,9 +798,10 @@ function closeAmbulance(tagCode) {
         svgStyle: null
     });
     
-    bar.animate(1.0);
+    bar.animate(1.0);*/
 
     var dni = localStorage.getItem("dni") + getDNILetterByParameter(localStorage.getItem("dni"));
+    var serviceTime = new Date();
 
     window.setTimeout(function () {
         // ----------------------------------------------------------------------
@@ -808,7 +814,7 @@ function closeAmbulance(tagCode) {
             data: {dni: dni, tagcode: tagCode},
             url: "http://trasano.org:8080/patient/close",
             error: function (jqXHR, textStatus, errorThrown){
-                navigator.notification.vibrate([1000, 1000, 1000, 1000, 1000]);
+                //navigator.notification.vibrate([1000, 1000, 1000, 1000, 1000]);
                 console.log("Close.Error: " + textStatus +  ", throws: " + errorThrown);
                 $("#probar").remove();
                 $("#trasanoModalBody").empty(); 
@@ -820,7 +826,7 @@ function closeAmbulance(tagCode) {
                     "CERRAR</button>");                                    
             },
             success: function(data) {
-                navigator.notification.vibrate(500);
+                //navigator.notification.vibrate(500);
                 if (data.error.length === 0) {
                     console.log("CLOSE ambulance by patient: " + dni);
                     
@@ -857,7 +863,6 @@ function closeAmbulance(tagCode) {
                     $("#trasanoModalFooter").append("<button type='button' class='btn btn-primary pull-right' data-dismiss='modal'>" + 
                     "CERRAR</button>"); 
                 }
-                window.location.reload();
             }
         });
     }, 
@@ -887,12 +892,9 @@ function onNdef (nfcEvent) {
 
     var fullTagCode = nfc.bytesToString(payload);
     var tagCode = getTagCode(fullTagCode);
-    navigator.notification.alert(tagCode, function() {}, "NFC TAG message");
-    
+    navigator.notification.alert(tagCode, function() {}, "Localización");
+
     closeAmbulance(tagCode);
-    
-    //navigator.notification.alert(nfc.bytesToHexString(nfcEvent.tag.id), function() {}, "NFC Tag ID"); 
-    //navigator.notification.alert(nfc.bytesToString(payload), function() {}, "NdefMessage payload");
 }
 /* 
  * Expects: void
@@ -983,7 +985,7 @@ function initNdefListener () {
 /*************************************************************************************************************
 * MOCK functions
 **************************************************************************************************************/
-function getAmbulance_MOCK() {
+/*function getAmbulance_MOCK() {
     $("#trasanoModalHeader").empty();
     $("#trasanoModalBody").empty();
     $("#probar").remove();
@@ -1006,14 +1008,14 @@ function getAmbulance_MOCK() {
     initMimeTypeListener_MOCK(function(){
         console.log("index.getAmbulance.initMimeTypeListener_MOCK.callback.function");
     });                           
-}
+}*/
 /* 
  * Expects: nfcEvent
  * Returns: Call TraSANO-WebService. Petition CLOSE.
  * WS_Data_INPUT = {dni, tagCode} 
  * WS_Data_OUTPUT = {companyAmbulance, numAmbulance, name, surname, serviceTime}
  */
-function initMimeTypeListener_MOCK() {        
+/*function initMimeTypeListener_MOCK() {        
     window.setTimeout(function () {
             console.log("trasano.initMimeTypeListener_MOCK.waiting: 3000");                  
 
@@ -1098,4 +1100,4 @@ function initMimeTypeListener_MOCK() {
                 });
         }, 
         3000);                           
-}
+}*/
