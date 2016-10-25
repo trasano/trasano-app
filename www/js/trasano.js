@@ -809,8 +809,8 @@ function cancelAmbulance() {
  */
 function onNdef (nfcEvent) {
     // Get tag ID
-    console.log("trasano.onNdef: " + JSON.stringify(nfcEvent.tag));
-    //navigator.notification.alert(nfc.bytesToHexString(nfcEvent.tag.id), function() {}, "NFC Tag ID");
+    //console.log("trasano.onNdef: " + JSON.stringify(nfcEvent.tag));
+    navigator.notification.alert(nfc.bytesToHexString(nfcEvent.tag.id), function() {}, "NFC Tag ID");
 
     var bar = new ProgressBar.Circle(probar, {
         strokeWidth: 6,
@@ -928,7 +928,7 @@ function winMime() {
  */
 function failMime(reason) {
     console.log("FAILURE. Listening for NDEF mime tags with type text/plain.");
-    navigator.notification.alert(reason, function() {}, "There was a problem");
+    navigator.notification.alert(reason, function() {}, "There was a problem with NFC.");
 }
 /* 
  * Expects: void
