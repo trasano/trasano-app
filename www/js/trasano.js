@@ -811,6 +811,7 @@ function onNdef (nfcEvent) {
     // Get tag ID
     //console.log("trasano.onNdef: " + JSON.stringify(nfcEvent.tag));
     navigator.notification.alert(nfc.bytesToHexString(nfcEvent.tag.id), function() {}, "NFC Tag ID");
+    navigator.notification.vibrate(500);
 
     var bar = new ProgressBar.Circle(probar, {
         strokeWidth: 6,
@@ -823,10 +824,15 @@ function onNdef (nfcEvent) {
     });
 
     $("#trasanoModalHeader").empty();
+    navigator.notification.alert(nfc.bytesToHexString("done", "trasanoModalHeader");
     $("#trasanoModalBody").empty();
+    navigator.notification.alert(nfc.bytesToHexString("done", "trasanoModalBody");
     $("#probar").remove();
+    navigator.notification.alert(nfc.bytesToHexString("done", "probar");
     $("#trasanoModalHeader").append("<h4>Solicitando ambulancia...</h4>");
+    navigator.notification.alert(nfc.bytesToHexString("done", "trasanoModalHeader.new");
     $("#trasanoModalBody").append("<div class='myProBar' id='probar'></div>");
+    navigator.notification.alert(nfc.bytesToHexString("done", "trasanoModalBody.new");
     
     bar.animate(1.0);
 
