@@ -379,13 +379,17 @@ function showCloseMODAL() {
     /***********************************
     * MOCK 
     ************************************/
-    //setTimeout(getAmbulance_MOCK, 2000);
-    setTimeout(closeAmbulance("1"), 2000);
+    //setTimeout(closeAmbulance("1"), 2000);
 
     /***********************************
     * PRODUCTION 
     ************************************/
-    //getAmbulance();
+    getAmbulance();
+
+    /***********************************
+    * MOCK.OLD
+    ************************************/
+    //setTimeout(getAmbulance_MOCK, 2000);
 }
 /* 
  * Expects: void
