@@ -885,10 +885,10 @@ function onNdef (nfcEvent) {
     console.log("trasano.onNdef.ndefMessage.payload: " + nfc.bytesToString(payload));
     //navigator.notification.alert(nfc.bytesToString(payload), function() {}, "NdefMessage payload");
 
-    //var fullTagCode = nfc.bytesToString(payload);
-    //var tagCode = getTagCode(fullTagCode);
-    var tagcode = getTagCode(nfc.bytesToString(payload));
+    var fullTagCode = nfc.bytesToString(payload);
+    var tagCode = getTagCode(fullTagCode);
     navigator.notification.alert(tagcode, function() {}, "NFC TAG message");
+    
     closeAmbulance(tagCode);
     
     //navigator.notification.alert(nfc.bytesToHexString(nfcEvent.tag.id), function() {}, "NFC Tag ID"); 
