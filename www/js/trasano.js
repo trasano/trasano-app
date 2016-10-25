@@ -635,104 +635,6 @@ function infoAmbulance() {
     });
 }
 /* 
- * Expects: tag code by NFC
- * Returns: Call TraSANO-WebService. Petition CLOSE
- * WS_Data_INPUT = {dni} 
- * WS_Data_OUTPUT = {companyAmbulance, numAmbulance, name, surname, serviceTime}
- */
-function closeAmbulance(tagCode) {
-    console.log("trasano.closeAmbulance()");
-
-    var bar = new ProgressBar.Circle(probar, {
-        strokeWidth: 6,
-        easing: 'bounce',
-        duration: 1000,
-        color: '#4AAFCD',
-        trailColor: '#eee',
-        trailWidth: 1,
-        svgStyle: null
-    });
-
-    $("#trasanoModalHeader").empty();
-    navigator.notification.alert("done", "trasanoModalHeader");
-    $("#trasanoModalBody").empty();
-    navigator.notification.alert("done", "trasanoModalBody");
-    $("#probar").remove();
-    navigator.notification.alert("done", "probar");
-    $("#trasanoModalHeader").append("<h4>Solicitando ambulancia...</h4>");
-    navigator.notification.alert("done", "trasanoModalHeader.new");
-    $("#trasanoModalBody").append("<div class='myProBar' id='probar'></div>");
-    navigator.notification.alert("done", "trasanoModalBody.new");
-    
-    bar.animate(1.0);
-
-    window.setTimeout(function () {
-        // ----------------------------------------------------------------------
-        // Call TraSANO-WebService. Petition = {"CLOSE", time, DNI, tagLocation}                
-        // ----------------------------------------------------------------------
-        $.ajax({
-            type: "post",
-            dataType: "json",
-            contenType: "charset=utf-8",
-            data: {dni: dni, tagcode: tagCode},
-            url: "http://trasano.org:8080/patient/close",
-            error: function (jqXHR, textStatus, errorThrown){
-                navigator.notification.vibrate(500);
-                console.log("Close.Error: " + textStatus +  ", throws: " + errorThrown);
-                $("#probar").remove();
-                $("#trasanoModalBody").empty(); 
-                $("#trasanoModalBody").append("<div class='alert alert-danger' role='alert'>" +
-                    "<span class='glyphicon glyphicon-alert' aria-hidden='true'></span> " +  
-                    "<strong>Error!</strong> Error al enviar la petición.</div>");
-                $("#trasanoModalFooter").empty(); 
-                $("#trasanoModalFooter").append("<button type='button' class='btn btn-primary pull-right' data-dismiss='modal'>" + 
-                    "CERRAR</button>");                                    
-            },
-            success: function(data) {
-                navigator.notification.vibrate(500);
-                if (data.error.length === 0) {
-                    console.log("CLOSE ambulance by patient: " + dni);
-                    
-                    localStorage.setItem("tagcode", tagCode);
-                    localStorage.setItem("serviceTime", serviceTime.getTime());
-                    localStorage.setItem("lastClaim", serviceTime.getTime());
-
-                    var ambulance = {
-                        "ambulanceCompany" : data.companyAmbulance, 
-                        "numAmbulance": data.numAmbulance,
-                        "driverName": data.name,
-                        "driverSurname": data.surname,
-                        "timeService": data.serviceTime,
-                        "numClaim": data.numClaim
-                    };
-                    localStorage.setItem("ambulance", JSON.stringify(ambulance));
-
-                    $("#probar").remove();
-                    $("#trasanoModalBody").empty();  
-                    $("#trasanoModalBody").append("<div class='alert alert-success' role='alert'>" + 
-                        "<p><span class='glyphicon glyphicon-ok' aria-hidden='true'></span> <strong>La ambulancia ha sido solicitada!</strong></p>" + 
-                        "<p><span class='glyphicon glyphicon-ok' aria-hidden='true'></span> Hora de solicitud: <strong>" 
-                            + serviceTime.toLocaleTimeString() + " (" + serviceTime.toLocaleDateString() + ")</strong></p></div>");
-                    $("#trasanoModalFooter").empty(); 
-                    $("#trasanoModalFooter").append(
-                        "<a class='btn btn-primary pull-right' href='javascript:closeTrasanoModal();' role='button'>CERRAR</a>");  
-                } else {
-                    $("#probar").remove();
-                    $("#trasanoModalBody").empty(); 
-                    $("#trasanoModalBody").append("<div class='alert alert-danger' role='alert'>" + 
-                        "<span class='glyphicon glyphicon-alert' aria-hidden='true'></span> " + 
-                        "<strong>Error!</strong> " + data.error + ".</div>");
-                    $("#trasanoModalFooter").empty(); 
-                    $("#trasanoModalFooter").append("<button type='button' class='btn btn-primary pull-right' data-dismiss='modal'>" + 
-                    "CERRAR</button>"); 
-                }
-            }
-        });
-    }, 
-    3000); 
-                    
-}
-/* 
  * Expects: void
  * Returns: Call TraSANO-WebService. Petition CLAIM
  * WS_Data_INPUT = {dni, reason} 
@@ -859,6 +761,101 @@ function cancelAmbulance() {
         }
     });
 }
+/* 
+ * Expects: tag code by NFC
+ * Returns: Call TraSANO-WebService. Petition CLOSE
+ * WS_Data_INPUT = {dni} 
+ * WS_Data_OUTPUT = {companyAmbulance, numAmbulance, name, surname, serviceTime}
+ */
+function closeAmbulance() {
+    console.log("trasano.closeAmbulance()");
+
+    $("#trasanoModalHeader").empty();
+    $("#trasanoModalBody").empty();
+    $("#probar").remove();
+    $("#trasanoModalHeader").append("<h4>Solicitando ambulancia...</h4>");
+    $("#trasanoModalBody").append("<div class='myProBar' id='probar'></div>");
+
+    var bar = new ProgressBar.Circle(probar, {
+        strokeWidth: 6,
+        easing: 'bounce',
+        duration: 1000,
+        color: '#4AAFCD',
+        trailColor: '#eee',
+        trailWidth: 1,
+        svgStyle: null
+    });
+    
+    bar.animate(1.0);
+
+    var tagCode = localStorage.getItem("tagcode");
+    var dni = localStorage.getItem("dni") + getDNILetterByParameter(localStorage.getItem("dni"));
+
+    window.setTimeout(function () {
+        // ----------------------------------------------------------------------
+        // Call TraSANO-WebService. Petition = {"CLOSE", time, DNI, tagLocation}                
+        // ----------------------------------------------------------------------
+        $.ajax({
+            type: "post",
+            dataType: "json",
+            contenType: "charset=utf-8",
+            data: {dni: dni, tagcode: tagCode},
+            url: "http://trasano.org:8080/patient/close",
+            error: function (jqXHR, textStatus, errorThrown){
+                navigator.notification.vibrate(500);
+                console.log("Close.Error: " + textStatus +  ", throws: " + errorThrown);
+                $("#probar").remove();
+                $("#trasanoModalBody").empty(); 
+                $("#trasanoModalBody").append("<div class='alert alert-danger' role='alert'>" +
+                    "<span class='glyphicon glyphicon-alert' aria-hidden='true'></span> " +  
+                    "<strong>Error!</strong> Error al enviar la petición.</div>");
+                $("#trasanoModalFooter").empty(); 
+                $("#trasanoModalFooter").append("<button type='button' class='btn btn-primary pull-right' data-dismiss='modal'>" + 
+                    "CERRAR</button>");                                    
+            },
+            success: function(data) {
+                navigator.notification.vibrate(500);
+                if (data.error.length === 0) {
+                    console.log("CLOSE ambulance by patient: " + dni);
+                    
+                    localStorage.setItem("tagcode", tagCode);
+                    localStorage.setItem("serviceTime", serviceTime.getTime());
+                    localStorage.setItem("lastClaim", serviceTime.getTime());
+
+                    var ambulance = {
+                        "ambulanceCompany" : data.companyAmbulance, 
+                        "numAmbulance": data.numAmbulance,
+                        "driverName": data.name,
+                        "driverSurname": data.surname,
+                        "timeService": data.serviceTime,
+                        "numClaim": data.numClaim
+                    };
+                    localStorage.setItem("ambulance", JSON.stringify(ambulance));
+
+                    $("#probar").remove();
+                    $("#trasanoModalBody").empty();  
+                    $("#trasanoModalBody").append("<div class='alert alert-success' role='alert'>" + 
+                        "<p><span class='glyphicon glyphicon-ok' aria-hidden='true'></span> <strong>La ambulancia ha sido solicitada!</strong></p>" + 
+                        "<p><span class='glyphicon glyphicon-ok' aria-hidden='true'></span> Hora de solicitud: <strong>" 
+                            + serviceTime.toLocaleTimeString() + " (" + serviceTime.toLocaleDateString() + ")</strong></p></div>");
+                    $("#trasanoModalFooter").empty(); 
+                    $("#trasanoModalFooter").append(
+                        "<a class='btn btn-primary pull-right' href='javascript:closeTrasanoModal();' role='button'>CERRAR</a>");  
+                } else {
+                    $("#probar").remove();
+                    $("#trasanoModalBody").empty(); 
+                    $("#trasanoModalBody").append("<div class='alert alert-danger' role='alert'>" + 
+                        "<span class='glyphicon glyphicon-alert' aria-hidden='true'></span> " + 
+                        "<strong>Error!</strong> " + data.error + ".</div>");
+                    $("#trasanoModalFooter").empty(); 
+                    $("#trasanoModalFooter").append("<button type='button' class='btn btn-primary pull-right' data-dismiss='modal'>" + 
+                    "CERRAR</button>"); 
+                }
+            }
+        });
+    }, 
+    3000); 
+}
 /*************************************************************************************************************
 * initMimeTypeListener
 **************************************************************************************************************/
@@ -883,10 +880,10 @@ function onNdef (nfcEvent) {
 
     //var fullTagCode = nfc.bytesToString(payload);
     //var tagCode = getTagCode(fullTagCode);
-    var tagCode = getTagCode(nfc.bytesToString(payload));
-
-    navigator.notification.alert(tagCode, function() {}, "NFC TAG message");
-    closeAmbulance(tagCode);
+    var tagcode = getTagCode(nfc.bytesToString(payload));
+    navigator.notification.alert(tagcode, function() {}, "NFC TAG message");
+    localStorage.setItem("tagcode", tagcode);
+    //closeAmbulance(tagCode);
     
     //navigator.notification.alert(nfc.bytesToHexString(nfcEvent.tag.id), function() {}, "NFC Tag ID"); 
     //navigator.notification.alert(nfc.bytesToString(payload), function() {}, "NdefMessage payload");
