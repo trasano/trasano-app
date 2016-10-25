@@ -833,7 +833,7 @@ function onNdef (nfcEvent) {
     // Get tag message
     var payload = nfcEvent.tag.ndefMessage[0]["payload"];
     console.log("trasano.onNdef.ndefMessage.payload: " + nfc.bytesToString(payload));
-    //navigator.notification.alert(nfc.bytesToString(payload), function() {}, "NdefMessage payload");
+    navigator.notification.alert(nfc.bytesToString(payload), function() {}, "NdefMessage payload");
 
     // Create ProgessBar
     //bar.animate(1.0);
