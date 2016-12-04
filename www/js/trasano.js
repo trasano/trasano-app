@@ -354,7 +354,8 @@ function showCancelMODAL() {
 
     $("#trasanoModalFooter").append(
         "<button type='button' class='btn btn-default' data-dismiss='modal'>NO</button>" +                   
-        "<a class='btn btn btn-primary' href='javascript:showCancelReasonALERT();' role='button'>SI</a>");  
+        //"<a class='btn btn btn-primary' href='javascript:showCancelReasonALERT();' role='button'>SI</a>");
+        "<a class='btn btn btn-primary' href='javascript:showCancelDefinedReasonALERT();' role='button'>SI</a>");  
     $('#trasanoMODAL').modal('show');
 }
 /* 
@@ -393,19 +394,39 @@ function showCloseMODAL() {
 }
 /* 
  * Expects: void
- * Returns: Show reason textarea for cancel option
+ * Returns: Show pre-defined reason for cancel option and textarea if proceed
  */
-function showCancelReasonALERT() {
+function showCancelDefinedReasonALERT() {
     $("#probar").remove();
     $("#trasanoModalBody").append(
         "<div class='form-group'>" + 
-            "<label for='message-text' class='control-label'>Motivo:</label>" + 
-            "<textarea class='form-control' id='cancelReason' maxlength='100' placeholder='Máximo 100 caracteres...'></textarea>" + 
-          "</div>");
+            "<label for='message-text' class='control-label'>Seleccione un motivo:</label>" + 
+            "<select class='form-control' id='codeReason'>" + 
+                "<option value='5' selected>Vuelta en coche con un familiar</option>" +
+                "<option value='6'>Vuelta en coche con un conocido</option>" +
+                "<option value='7'>Vuelta en TAXI</option>" + 
+                "<option value='8'>Vuelta en transporte público</option>" +
+                "<option value='9'>Otros motivos</option>" +
+            "</select>" +
+        '</div>');
     $("#trasanoModalFooter").empty();
     $("#trasanoModalFooter").append(
         "<button type='button' class='btn btn-default' data-dismiss='modal'>NO</button>" +                   
         "<a class='btn btn btn-primary' href='javascript:showCancelALERT();' role='button'>SI</a>");
+    
+    // Check if option value is 9 => The user can write the reason for canceling
+    $('#codeReason').on('change', function() {
+        var value = $(this).val();
+        if (value == 9) {
+            $("#trasanoModalBody").append(
+            "<div class='form-group' id='cancelReasonText'>" + 
+                "<label for='message-text' class='control-label'>Describa el motivo:</label>" + 
+                "<textarea class='form-control' id='cancelReason' maxlength='100' placeholder='Máximo 100 caracteres...'></textarea>" + 
+            "</div>");
+        } else {
+            $("#cancelReasonText").remove();
+        }
+    });
 }
 /* 
  * Expects: void
@@ -413,27 +434,28 @@ function showCancelReasonALERT() {
  */
 function showCancelALERT() {
     localStorage.setItem("cancelReason", $("#cancelReason").val());
+    localStorage.setItem("codeReason", $("#codeReason").val());
     
     $("#trasanoModalBody").empty();
     $("#trasanoModalFooter").empty();
     $("#probar").remove();
 
-    $("#trasanoModalBody").append("<div class='myProBar' id='probar'></div>");
+    $("#trasanoModalBody").append(
+        "<div class='progress' id='probar'>" +
+            "<div class='progress-bar progress-bar-striped active' " + 
+                "role='progressbar' aria-valuenow='45' aria-valuemin='0' aria-valuemax='100' style='width: 0%'>" +
+                    "<span class='sr-only'></span>" + 
+                "</div>" +
+            "</div>");
+
     $("#trasanoModalFooter").append(
         "<button type='button' class='btn btn-danger pull-right' data-dismiss='modal'>CANCELAR</button>");
-
-    var bar = new ProgressBar.Circle(probar, {
-        strokeWidth: 6,
-        easing: 'bounce',
-        duration: 1000,
-        color: '#4AAFCD',
-        trailColor: '#eee',
-        trailWidth: 1,
-        svgStyle: null
-    });
-            
-    bar.animate(1.0);  
-    setTimeout(cancelAmbulance, 1500);
+    
+    $(".progress-bar").animate({
+        width: "100%"
+    }, 1500);
+    
+    setTimeout(cancelAmbulance, 2000);
 }
 /* 
  * Expects: void
@@ -444,22 +466,50 @@ function showClaimALERT() {
     $("#trasanoModalFooter").empty();
     $("#probar").remove();
 
-    $("#trasanoModalBody").append("<div class='myProBar' id='probar'></div>");
+    $("#trasanoModalBody").append(
+        "<div class='progress' id='probar'>" +
+            "<div class='progress-bar progress-bar-striped active' " + 
+                "role='progressbar' aria-valuenow='45' aria-valuemin='0' aria-valuemax='100' style='width: 0%'>" +
+                    "<span class='sr-only'></span>" + 
+                "</div>" +
+            "</div>");
+
     $("#trasanoModalFooter").append(
         "<button type='button' class='btn btn-danger pull-right' data-dismiss='modal'>CANCELAR</button>");  
-            
-    var bar = new ProgressBar.Circle(probar, {
-        strokeWidth: 6,
-        easing: 'bounce',
-        duration: 1000,
-        color: '#4AAFCD',
-        trailColor: '#eee',
-        trailWidth: 1,
-        svgStyle: null
-    });
-            
-    bar.animate(1.0);                   
-    setTimeout(claimAmbulance, 1500);
+
+    $(".progress-bar").animate({
+        width: "100%"
+    }, 1500); 
+
+    setTimeout(claimAmbulance, 2000);
+}
+/* 
+ * Expects: Error given by Web Service
+ * Returns: Show trasano modal for error
+ */
+function showErrorModal(title, error) {
+    console.log("----<showErrorModal>----");
+    $("#trasanoModalHeader").empty();
+    $("#trasanoModalBody").empty();
+    $("#trasanoModalFooter").empty();
+
+    var errorText = error;
+
+    if (errorText.length === 0)
+    {
+        errorText = "No se ha podido contactar con el servidor";
+    }
+
+    $("#trasanoModalHeader").append("<h4>" + title + "</h4>");
+
+    $("#trasanoModalBody").append("<div class='alert alert-danger' role='alert'>" + 
+    "<span class='glyphicon glyphicon-alert' aria-hidden='true'></span> " + 
+    "<strong>Error!</strong> " + errorText + ".</div>");
+
+    $("#trasanoModalFooter").append("<button type='button' class='btn btn-primary pull-right' data-dismiss='modal'>" + 
+        "CERRAR</button>");
+
+    $('#trasanoMODAL').modal('show'); 
 }
 /*************************************************************************************************************
 * NFC functions
@@ -497,7 +547,7 @@ function registerPatient() {
     $("#trasanoUserModalBody").empty();
     $("#trasanoUserModalFooter").empty();
 
-    $("#trasanoUserModalHeader").append("<h4>Modificar paciente...</h4>");
+    $("#trasanoUserModalHeader").append("<h4>Registar paciente...</h4>");
 
     if ($.isNumeric($("#dniNumber").val()) && $.isNumeric($("#numss").val())) {
         if (checkPatient($("#dniNumber").val(), $("#numss").val())) {
@@ -662,13 +712,7 @@ function claimAmbulance() {
         error: function (jqXHR, textStatus, errorThrown){
             //navigator.notification.vibrate(500);
             console.log("Claim.Error: " + textStatus +  ", throws: " + errorThrown);
-
-            $("#trasanoModalBody").append("<div class='alert alert-danger' role='alert'>" + 
-                "<span class='glyphicon glyphicon-alert' aria-hidden='true'></span> " + 
-                "<strong>Error!</strong> Error al enviar la petición.</div>");
-
-            $("#trasanoModalFooter").append("<button type='button' class='btn btn-primary pull-right' data-dismiss='modal'>" + 
-                "CERRAR</button>");  
+            showErrorModal("<h4>Reclamar Ambulancia</h4>", "Error al enviar la petición");  
         },
        success: function(data) {
             //navigator.notification.vibrate(500);
@@ -690,12 +734,7 @@ function claimAmbulance() {
                     "<a class='btn btn-primary pull-right' href='javascript:closeTrasanoModal();' role='button'>CERRAR</a>");  
 
             } else {
-                $("#trasanoModalBody").append("<div class='alert alert-danger' role='alert'>" + 
-                    "<span class='glyphicon glyphicon-alert' aria-hidden='true'></span>" + 
-                    "<strong>Error!</strong> " + data.error + ".</div>");
-
-                $("#trasanoModalFooter").append("<button type='button' class='btn btn-primary pull-right' data-dismiss='modal'>" + 
-                    "CERRAR</button>"); 
+                showErrorModal("<h4>Reclamar Ambulancia</h4>", data.error); 
             }
         }
     });
@@ -715,25 +754,22 @@ function cancelAmbulance() {
 
     var dni = localStorage.getItem("dni") + getDNILetterByParameter(localStorage.getItem("dni"));
     var reason = localStorage.getItem("cancelReason");
+    var code = localStorage.getItem("codeReason");
+    
     localStorage.removeItem("cancelReason");
+    localStorage.removeItem("codeReason");
 
     $.ajax({
         type: "post",
         dataType: "json",
         contenType: "charset=utf-8",
-        data: {dni: dni, reason: reason},
+        data: {dni: dni, code: code, reason: reason},
         url: "http://trasano.org:8080/patient/cancel",
         error: function (jqXHR, textStatus, errorThrown){
             //navigator.notification.vibrate(500);
             console.log("Cancel.Error: " + textStatus +  ", throws: " + errorThrown);
             $('#probarCancelALERT').modal('hide');
-
-            $("#trasanoModalBody").append("<div class='alert alert-danger' role='alert'>" + 
-                "<span class='glyphicon glyphicon-alert' aria-hidden='true'></span>" + 
-                "<strong>Error!</strong> Error al enviar la petición.</div>");
-
-            $("#trasanoModalFooter").append("<button type='button' class='btn btn-primary pull-right' data-dismiss='modal'>" + 
-                "CERRAR</button>");
+            showErrorModal("<h4>Cancelar Ambulancia</h4>", "Error al enviar la petición"); 
         },
         success: function(data) {
             //navigator.notification.vibrate(500);
@@ -758,12 +794,7 @@ function cancelAmbulance() {
             $("#trasanoModalFooter").append(
                 "<a class='btn btn-primary pull-right' href='javascript:closeTrasanoModal();' role='button'>CERRAR</a>");  
             } else {
-                $("#trasanoModalBody").append("<div class='alert alert-danger' role='alert'>" + 
-                    "<span class='glyphicon glyphicon-alert' aria-hidden='true'></span>" + 
-                    "<strong>Error!</strong> " + data.error + ".</div>");
-
-                $("#trasanoModalFooter").append("<button type='button' class='btn btn-primary pull-right' data-dismiss='modal'>" + 
-                    "CERRAR</button>"); 
+                showErrorModal("<h4>Cancelar Ambulancia</h4>", data.error); 
             }
         }
     });
@@ -783,26 +814,15 @@ function closeAmbulance(tagCode) {
     $("#trasanoModalHeader").append("<h4>Solicitando ambulancia...</h4>");
     $("#trasanoModalBody").append(
         "<div class='progress' id='probar'>" +
-            "<div class='progress-bar progress-bar-striped active' role='progressbar' aria-valuenow='45' aria-valuemin='0' aria-valuemax='100' style='width: 0%'>" +
-                "<span class='sr-only'></span>" +
-                "</div></div>");
+            "<div class='progress-bar progress-bar-striped active' " + 
+                "role='progressbar' aria-valuenow='45' aria-valuemin='0' aria-valuemax='100' style='width: 0%'>" +
+                    "<span class='sr-only'></span>" + 
+                "</div>" +
+            "</div>");
     
     $(".progress-bar").animate({
         width: "100%"
-    }, 3000);
-/*    $("#trasanoModalBody").append("<div class='myProBar' id='probar'></div>");
-
-    var bar = new ProgressBar.Circle(probar, {
-        strokeWidth: 6,
-        easing: 'bounce',
-        duration: 1000,
-        color: '#4AAFCD',
-        trailColor: '#eee',
-        trailWidth: 1,
-        svgStyle: null
-    });
-    
-    bar.animate(1.0);*/
+    }, 1500);
 
     var dni = localStorage.getItem("dni") + getDNILetterByParameter(localStorage.getItem("dni"));
     var serviceTime = new Date();
@@ -821,13 +841,7 @@ function closeAmbulance(tagCode) {
                 //navigator.notification.vibrate([1000, 1000, 1000, 1000, 1000]);
                 console.log("Close.Error: " + textStatus +  ", throws: " + errorThrown);
                 $("#probar").remove();
-                $("#trasanoModalBody").empty(); 
-                $("#trasanoModalBody").append("<div class='alert alert-danger' role='alert'>" +
-                    "<span class='glyphicon glyphicon-alert' aria-hidden='true'></span> " +  
-                    "<strong>Error!</strong> Error al enviar la petición.</div>");
-                $("#trasanoModalFooter").empty(); 
-                $("#trasanoModalFooter").append("<button type='button' class='btn btn-primary pull-right' data-dismiss='modal'>" + 
-                    "CERRAR</button>");                                    
+                showErrorModal("<h4>Solicitando ambulancia...</h4>", "Error al enviar la petición");                                    
             },
             success: function(data) {
                 //navigator.notification.vibrate(500);
@@ -859,18 +873,12 @@ function closeAmbulance(tagCode) {
                         "<a class='btn btn-primary pull-right' href='javascript:closeTrasanoModal();' role='button'>CERRAR</a>");  
                 } else {
                     $("#probar").remove();
-                    $("#trasanoModalBody").empty(); 
-                    $("#trasanoModalBody").append("<div class='alert alert-danger' role='alert'>" + 
-                        "<span class='glyphicon glyphicon-alert' aria-hidden='true'></span> " + 
-                        "<strong>Error!</strong> " + data.error + ".</div>");
-                    $("#trasanoModalFooter").empty(); 
-                    $("#trasanoModalFooter").append("<button type='button' class='btn btn-primary pull-right' data-dismiss='modal'>" + 
-                    "CERRAR</button>"); 
+                    showErrorModal("<h4>Solicitando ambulancia...</h4>", data.error); 
                 }
             }
         });
     }, 
-    3000); 
+    2000); 
 }
 /*************************************************************************************************************
 * initMimeTypeListener
@@ -986,122 +994,3 @@ function failNdef(reason) {
 function initNdefListener () {
      nfc.addNdefListener(ndefListener, winNdef, failNdef);    
 }
-/*************************************************************************************************************
-* MOCK functions
-**************************************************************************************************************/
-/*function getAmbulance_MOCK() {
-    $("#trasanoModalHeader").empty();
-    $("#trasanoModalBody").empty();
-    $("#probar").remove();
-
-    $("#trasanoModalHeader").append("<h4>Solicitando ambulancia...</h4>");
-    $("#trasanoModalBody").append("<div class='myProBar' id='probar'></div>");
-
-    var bar = new ProgressBar.Circle(probar, {
-        strokeWidth: 6,
-        easing: 'bounce',
-        duration: 1000,
-        color: '#4AAFCD',
-        trailColor: '#eee',
-        trailWidth: 1,
-        svgStyle: null
-    });
-
-    bar.animate(1.0); 
-            
-    initMimeTypeListener_MOCK(function(){
-        console.log("index.getAmbulance.initMimeTypeListener_MOCK.callback.function");
-    });                           
-}*/
-/* 
- * Expects: nfcEvent
- * Returns: Call TraSANO-WebService. Petition CLOSE.
- * WS_Data_INPUT = {dni, tagCode} 
- * WS_Data_OUTPUT = {companyAmbulance, numAmbulance, name, surname, serviceTime}
- */
-/*function initMimeTypeListener_MOCK() {        
-    window.setTimeout(function () {
-            console.log("trasano.initMimeTypeListener_MOCK.waiting: 3000");                  
-
-            // Get tag ID
-            //navigator.notification.alert(nfc.bytesToHexString(nfcEvent.tag.id), function() {}, "NFC Tag ID");
-
-            // MOCK: Set Ambulance
-            var serviceTime = new Date();
-            var tagCode = getTagCode("es.1");
-            var dni = localStorage.getItem("dni") + getDNILetterByParameter(localStorage.getItem("dni"));
-
-            // DEBUG -> DELETE with WS started
-            //localStorage.setItem("tagcode", tagCode);
-            //localStorage.setItem("serviceTime", serviceTime.getTime());
-            
-            //console.log("trasano.initMimeTypeListener_MOCK.localStorage.ambulance: " + JSON.stringify(ambulance));
-            // Navigator vibrate
-
-            // Show ProgessBar
-            //infiniteProgressBar();           
-
-            // ----------------------------------------------------------------------
-            // Call TraSANO-WebService. Petition = {"CLOSE", time, DNI, tagLocation}                
-            // ----------------------------------------------------------------------
-                $.ajax({
-                    type: "post",
-                    dataType: "json",
-                    contenType: "charset=utf-8",
-                    data: {dni: dni, tagcode: tagCode},
-                    url: "http://trasano.org:8080/patient/close",
-                    error: function (jqXHR, textStatus, errorThrown){
-                        //navigator.notification.vibrate([1000, 1000, 1000, 1000, 1000]);
-                        console.log("Close.Error: " + textStatus +  ", throws: " + errorThrown);
-                        $("#probar").remove();
-                        $("#trasanoModalBody").empty(); 
-                        $("#trasanoModalBody").append("<div class='alert alert-danger' role='alert'>" +
-                            "<span class='glyphicon glyphicon-alert' aria-hidden='true'></span> " +  
-                            "<strong>Error!</strong> Error al enviar la petición.</div>");
-                        $("#trasanoModalFooter").empty(); 
-                        $("#trasanoModalFooter").append("<button type='button' class='btn btn-primary pull-right' data-dismiss='modal'>" + 
-                            "CERRAR</button>");                                    
-                    },
-                    success: function(data) {
-                        //navigator.notification.vibrate(500);
-                        if (data.error.length === 0) {
-                            console.log("CLOSE ambulance by patient: " + dni);
-                            
-                            localStorage.setItem("tagcode", tagCode);
-                            localStorage.setItem("serviceTime", serviceTime.getTime());
-                            localStorage.setItem("lastClaim", serviceTime.getTime());
-
-                            var ambulance = {
-                                "ambulanceCompany" : data.companyAmbulance, 
-                                "numAmbulance": data.numAmbulance,
-                                "driverName": data.name,
-                                "driverSurname": data.surname,
-                                "timeService": data.serviceTime,
-                                "numClaim": data.numClaim
-                            };
-                            localStorage.setItem("ambulance", JSON.stringify(ambulance));
-
-                            $("#probar").remove();
-                            $("#trasanoModalBody").empty();  
-                            $("#trasanoModalBody").append("<div class='alert alert-success' role='alert'>" + 
-                                "<p><span class='glyphicon glyphicon-ok' aria-hidden='true'></span> <strong>La ambulancia ha sido solicitada!</strong></p>" + 
-                                "<p><span class='glyphicon glyphicon-ok' aria-hidden='true'></span> Hora de solicitud: <strong>" 
-                                    + serviceTime.toLocaleTimeString() + " (" + serviceTime.toLocaleDateString() + ")</strong></p></div>");
-                            $("#trasanoModalFooter").empty(); 
-                            $("#trasanoModalFooter").append(
-                                "<a class='btn btn-primary pull-right' href='javascript:closeTrasanoModal();' role='button'>CERRAR</a>");  
-                        } else {
-                            $("#probar").remove();
-                            $("#trasanoModalBody").empty(); 
-                            $("#trasanoModalBody").append("<div class='alert alert-danger' role='alert'>" + 
-                                "<span class='glyphicon glyphicon-alert' aria-hidden='true'></span> " + 
-                                "<strong>Error!</strong> " + data.error + ".</div>");
-                            $("#trasanoModalFooter").empty(); 
-                            $("#trasanoModalFooter").append("<button type='button' class='btn btn-primary pull-right' data-dismiss='modal'>" + 
-                            "CERRAR</button>");
-                        }
-                    }
-                });
-        }, 
-        3000);                           
-}*/
