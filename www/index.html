@@ -56,9 +56,6 @@
     <script type="text/javascript" src="js/trasano.js"></script>
     <script type="text/javascript" src="resource/config.js"></script> 
 
-    <!-- Progressbar.js library -->
-    <script type="text/javascript" src="dist/js/progressbar.js"></script> 
-
     <script>          
         // Waiting to phoneGAP ready 
         function onLoad() {
@@ -79,44 +76,9 @@
                         // Update ambulance service
                         infoAmbulance();
                         // Show patient info 
-                        showPatient();
-
-                        //$("#dniJumbotron").append("<p class='text-center'>Acerque su dispositivo móvil a la pegatina NFC</p>");
-                        //$("#dniJumbotron").append("<button type='button' class='btn btn-success btn-lg' data-toggle='modal' data-target='#nfcALERT'>Solicitar</button>");
-                        /****************************************************************************************************************************************************/
-                        //  DEBUG Code                        
-                        // Read NFC tag
-                        //window.addEventListener("load", initReadNFC,false);
-                        //readNFCTag();  /* ERROR: No reconoce el tipo tag */                                                                               
-                        //discoverTag(); /* FUNCIONA */
-                        //initNdefListener(); /* FUNCIONA */
-                        /****************************************************************************************************************************************************/
-                        // check if is NFC Device                
-                        /*nfc.enabled(
-                            function () {
-                                console.log("index.nfc.enabled.success");
-                                initMimeTypeListener();           
-                            },
-                            function (errorCode) {
-                                console.log("index.nfc.enabled.failure");
-                                var err = errorCode;
-
-                                switch (err) {
-                                    case "NO_NFC":
-                                        console.log("index.nfc.NO_NFC");                    
-                                        location.href = "pages/error.html"; 
-                                        break; 
-                                    case "NFC_DISABLED":
-                                        console.log("index.nfc.NFC_DISABLED");                                
-                                        //DEBUG: volver al principio                                                                                              
-                                        break;
-                                    default:
-                                        console.log("index.nfc.DEFAULT");
-                                }                    
-                            }             
-                        );*/
+                        showPatient();    
                     }
-                    // CREATE FUNCTION TO CHECK IF AMBULANCE IS OUT OF DATE
+                    // FUNCTION TO CHECK IF AMBULANCE IS OUT OF DATE
                     if (localStorage.getItem("serviceTime") != null && localStorage.getItem("serviceTime") != "") {
                         var serviceTime = new Date(parseInt(localStorage.getItem("serviceTime")));
                         //serviceTime.setTime(parseInt(localStorage.getItem("serviceTime")));   
